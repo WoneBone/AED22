@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FREQ_SIZE 20
+#define FREQ_SIZE 26
 
 
 typedef struct _histogram

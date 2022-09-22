@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define FREQ_SIZE 20
+#define FREQ_SIZE 26
 
 typedef struct _histogram
 {
@@ -21,6 +21,9 @@ int main(int argc, char** argv)
 
    histogram histograma;
    histograma.numberLetters = strlen(argv[1]);
+
+   for (int i = 0; i < FREQ_SIZE; i++)
+      histograma.frequency[i] = 0;
 
    for(unsigned int i = 0; i < histograma.numberLetters; i++)  {
       int converted = toupper(argv[1][i]) - 'A';

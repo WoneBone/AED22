@@ -135,7 +135,9 @@ void print_list(void)
  */
 void remove_next(list *previous_node)
 {
+   list *aux =  previous_node->next;
    previous_node->next = previous_node->next->next;
+   free (aux);
 
    return;
 }
