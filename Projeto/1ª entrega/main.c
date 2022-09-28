@@ -17,13 +17,12 @@
 #include <stdio.h>
 #define MAX_STR 100
 
-typedef struct _st_texto {
+typedef struct dic {
   int  n_total_palavras;	/* total number of words */
   int  n_dist_palavras;		/* number of distinct words*/
-  char **palavras;		/* Table of strings for words "palavras"*/
-  int  *ocorrencias;		/* Table of integers for counting occurences
-                                   "ocorr�ncias" */
-} st_texto;
+  char ***palavras;		/* Table of strings for words "palavras"*/
+  int tamanho[MAX_STR]; /*Table of integers with the amont of words for each size i "tamanho*/
+} dic;
 
 
 /******************************************************************************
@@ -88,43 +87,47 @@ FILE *AbreFicheiro ( char *nome, char *mode )
  *
  *****************************************************************************/
 
-void AlocaTabelaPalavras ( char *ficheiro, st_texto *t)
+void AlocaTabelaPalavras ( char *ficheiro, dic *t)
 {
   FILE *f;
   char *palavra;
-  int i, l, n_max_caracteres = 0;
+  int i, l, n_max_caracteres = 0,j;
 
   t->n_total_palavras = 0;
   t->n_dist_palavras = 0;
+  for (i = 0; i < MAX_STR; i++) 
+    t->tamanho[i] = 0;
+
   f = AbreFicheiro ( ficheiro, "r" );
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
     t->n_total_palavras++;
-    l = strlen ( palavra );
+    l = strlen( palavra );
     if ( l > n_max_caracteres )
       n_max_caracteres = l;
+    t->tamanho[l - 1]++;
   }
   fclose ( f );
   printf ( "Words count: %d\n", t->n_total_palavras );
-  t->palavras =(char**) malloc(sizeof(char*) * t->n_total_palavras);
+  t->palavras =(char***) malloc(sizeof(char**) * n_max_caracteres); //alocaçao de nº tabelas para cada tamanho
   if ( t->palavras == NULL ) {
     fprintf ( stderr, "ERROR: not enough memory available!\n" );
     exit ( 2 );
   }
-  t->ocorrencias = (int*) malloc(sizeof(int) * t->n_total_palavras);
-  if ( t->ocorrencias == NULL ) {
-    fprintf ( stderr, "ERROR: not enough memory available!\n" );
-    exit ( 4 );
-  }
-  for ( i = 0; i < t->n_total_palavras; i++ )	{
-    t->palavras[i] = (char*) malloc(sizeof(char)* (n_max_caracteres +1));
+  for(i = 0; i < n_max_caracteres; i++){
+    t->palavras[i] = (char**) malloc(sizeof(char*) * t->tamanho[i]); //alocaçao de nº de palavras para cada tamanho
     if ( t->palavras[i] == NULL ) {
       fprintf ( stderr, "ERROR: not enough memory available!\n" );
-      exit ( 3 );
+      exit ( 2 );
     }
-    t->palavras[i][0] = '\0' ;
-    t->ocorrencias[i] = 0 ;
+    for(j = 0; j < t->tamanho[i]; j++){ //alocaçao de tamanho para cada palavra
+      t->palavras[i][j] = (char*) malloc(sizeof(char)*(i + 2));
+      if ( t->palavras[i][j] == NULL ) {
+        fprintf ( stderr, "ERROR: not enough memory available!\n" );
+        exit ( 2 );
+      }
+      t->palavras[i][j][0] = '\0'
+    }
   }
-
   return;
 }
 
