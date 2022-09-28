@@ -5,4 +5,4 @@ Colaboradores:
 	Alex Ares nº 99884
 
 Instituição:
-	Instituto Superior Técnico
+	Instituto Superior Técnic
