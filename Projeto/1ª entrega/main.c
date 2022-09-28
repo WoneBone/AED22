@@ -21,7 +21,8 @@ typedef struct dic {
   int  n_total_palavras;	/* total number of words */
   int  n_dist_palavras;		/* number of distinct words*/
   char ***palavras;		/* Table of strings for words "palavras"*/
-  int tamanho[MAX_STR]; /*Table of integers with the amont of words for each size i "tamanho*/
+  int tamanho[MAX_STR]; /*Table of integers with the amont of words for each size i "tamanho"*/
+  int bigboi; /*Biggest word "bigboi"*/
 } dic;
 
 
@@ -91,10 +92,11 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
 {
   FILE *f;
   char *palavra;
-  int i, l, n_max_caracteres = 0,j;
+  int i, l,j;
 
   t->n_total_palavras = 0;
   t->n_dist_palavras = 0;
+  t->bigboi = 0;
   for (i = 0; i < MAX_STR; i++) 
     t->tamanho[i] = 0;
 
@@ -102,18 +104,18 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
     t->n_total_palavras++;
     l = strlen( palavra );
-    if ( l > n_max_caracteres )
-      n_max_caracteres = l;
+    if ( l > t->bigboi )
+      t->bigboi = l;
     t->tamanho[l - 1]++;
   }
   fclose ( f );
   printf ( "Words count: %d\n", t->n_total_palavras );
-  t->palavras =(char***) malloc(sizeof(char**) * n_max_caracteres); //alocaçao de nº tabelas para cada tamanho
+  t->palavras =(char***) malloc(sizeof(char**) * t->bigboi); //alocaçao de nº tabelas para cada tamanho
   if ( t->palavras == NULL ) {
     fprintf ( stderr, "ERROR: not enough memory available!\n" );
     exit ( 2 );
   }
-  for(i = 0; i < n_max_caracteres; i++){
+  for(i = 0; i < t->bigboi; i++){
     t->palavras[i] = (char**) malloc(sizeof(char*) * t->tamanho[i]); //alocaçao de nº de palavras para cada tamanho
     if ( t->palavras[i] == NULL ) {
       fprintf ( stderr, "ERROR: not enough memory available!\n" );
@@ -176,6 +178,7 @@ void PreencheTabelaPalavras ( char *ficheiro, dic *t )
   FILE *f;
   int n;
   char *palavra;
+  int smol[t->bigboi];
 
   f = AbreFicheiro ( ficheiro, "r" );
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
