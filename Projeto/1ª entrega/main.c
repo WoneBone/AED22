@@ -79,7 +79,7 @@ FILE *AbreFicheiro ( char *nome, char *mode )
  * AlocaTabelaPalavras()
  *
  * Arguments: ficheiro - pointer to string holding name of file to open
- *            st_texto - pointer to structure where information will be saved
+ *            dic - pointer to structure where information will be saved
  * Returns: (none)
  * Side-Effects: none
  *
@@ -125,7 +125,7 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
         fprintf ( stderr, "ERROR: not enough memory available!\n" );
         exit ( 2 );
       }
-      t->palavras[i][j][0] = '\0'
+      t->palavras[i][j][0] = '\0';
     }
   }
   return;
@@ -136,7 +136,7 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
  * NovaPalavra()
  *
  * Arguments: palavra - pointer to string holding a word
- *            st_texto - pointer to structure where run information is kept
+ *            dic - pointer to structure where run information is kept
  * Returns: (none)
  * Side-Effects: none
  *
@@ -144,7 +144,7 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
  *
  *****************************************************************************/
 
-int NovaPalavra ( char *palavra, st_texto *t )
+int NovaPalavra ( char *palavra, dic *t )
 {
   int i = 0;
   /* This function searches for a word in the table.
@@ -163,7 +163,7 @@ int NovaPalavra ( char *palavra, st_texto *t )
  * PreencheTabelaPalavras()
  *
  * Arguments: ficheiro - pointer to string holding name of file to open
- *            st_texto - pointer to structure where information will be saved
+ *            dic - pointer to structure where information will be saved
  * Returns: (none)
  * Side-Effects: none
  *
@@ -171,7 +171,7 @@ int NovaPalavra ( char *palavra, st_texto *t )
  *
  *****************************************************************************/
 
-void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
+void PreencheTabelaPalavras ( char *ficheiro, dic *t )
 {
   FILE *f;
   int n;
@@ -181,11 +181,11 @@ void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
     if ( ( n = NovaPalavra ( palavra, &(*t) ) ) == -1 )	{
       strcpy ( t->palavras[t->n_dist_palavras], palavra );
-      t->ocorrencias[t->n_dist_palavras]++;
+      //t->ocorrencias[t->n_dist_palavras]++;
       t->n_dist_palavras++;
     }
     else {
-      t->ocorrencias[n]++;
+      //t->ocorrencias[n]++;
     }
   }
   fclose ( f );
@@ -197,7 +197,7 @@ void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
  * EscreveFicheiro()
  *
  * Arguments: ficheiro - pointer to string holding name of file to save
- *            st_texto - pointer to structure where information is kept
+ *            dic - pointer to structure where information is kept
  * Returns: (none)
  * Side-Effects: none
  *
@@ -205,7 +205,7 @@ void PreencheTabelaPalavras ( char *ficheiro, st_texto *t )
  *
  *****************************************************************************/
 
-void EscreveFicheiro ( char *ficheiro, st_texto *t )
+void EscreveFicheiro ( char *ficheiro, dic *t )
 {
   FILE *f;
   char *nome;
@@ -220,7 +220,7 @@ void EscreveFicheiro ( char *ficheiro, st_texto *t )
   strcat ( nome, ".palavras" );
   f = AbreFicheiro ( nome, "w" );
   for ( i = 0; i < t->n_dist_palavras; i++ ) {
-    fprintf ( f, "%d: %s\n", t->ocorrencias[i], t->palavras[i] );
+    //fprintf ( f, "%d: %s\n", t->ocorrencias[i], t->palavras[i] );
   }
   printf ( "Count of distinct words: %d\n", t->n_dist_palavras );
   fclose ( f );
@@ -243,7 +243,7 @@ void EscreveFicheiro ( char *ficheiro, st_texto *t )
 int main ( int argc, char **argv )
 {
   int i;
-  st_texto st_palavras;
+  dic st_palavras;
 
   if ( argc < 2 ) {
     fprintf ( stderr, "ERROR: missing filename in argument!\n" );

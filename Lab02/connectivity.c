@@ -203,12 +203,12 @@ void weighted_quick_union(int *id, int N, FILE * fp, int quietOut)
       if (sz[i] < sz[j]) {
          id[i] = j;
          sz[j] += sz[i];
-         elementar_u=elementar_u+5;
+         elementar_u=elementar_u+6;
       }
       else {
          id[j] = i;
          sz[i] += sz[j];
-         elementar_u=elementar_u+5;
+         elementar_u=elementar_u+6;
       }
       links_cnt++;
 
@@ -265,6 +265,7 @@ void compressed_weighted_quick_union(int *id, int N, FILE * fp, int quietOut)
       for (j = q; j != id[j]; j = id[j]){
          elementar_s=elementar_s+2;
       }
+      elementar_s=elementar_s+2;
 
       if (i == j) {
          /* already in the same set; discard */
@@ -279,13 +280,13 @@ void compressed_weighted_quick_union(int *id, int N, FILE * fp, int quietOut)
          id[i] = j;
          sz[j] += sz[i];
          t = j;
-         elementar_u=elementar_u+5;
+         elementar_u=elementar_u+6;
       }
       else {
          id[j] = i;
          sz[i] += sz[j];
          t = i;
-         elementar_u=elementar_u+5;
+         elementar_u=elementar_u+6;
       }
       links_cnt++;
 
