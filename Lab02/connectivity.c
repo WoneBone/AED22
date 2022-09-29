@@ -35,7 +35,7 @@
 
 void quick_find(int *id, int N, FILE * fp, int quietOut)
 {
-   int i, p, q, t;
+   int i, p, q, t, f = 0;
    int pairs_cnt = 0;            /* connection pairs counter */
    int links_cnt = 0;            /* number of links counter */
    unsigned long long int elementar_s=0, elementar_u = 0;
@@ -74,13 +74,20 @@ void quick_find(int *id, int N, FILE * fp, int quietOut)
    printf("QF: The number of links performed is %d for %d input pairs.\n",
           links_cnt, pairs_cnt);
    printf("Number of elemental operations in search: %llu\nNumber of elemental operations in union: %llu\n",elementar_s, elementar_u);
-   /*for (i = 0 ; i < N; i++){
+   for (i = 0 ; i < N; i++){
       q = 0;
       for (t = 0; t < N; t++){
-         if (id[t] == i) q = printf("%d - ", t);
-      } 
+         if (id[t] == i) {
+            if (f == 0){
+                q = printf("%d", t);
+                f++;
+            }
+            else q = printf(" - %d", t);
+         }
+      }
+      f = 0;
       if (q != 0) printf("\n");
-   }*/
+   }
    return;
 }
 
