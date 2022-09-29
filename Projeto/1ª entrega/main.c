@@ -148,12 +148,12 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
 
 int NovaPalavra ( char *palavra, dic *t )
 {
-  int i = 0;
+  int i = 0, l = strlen(palavra);
   /* This function searches for a word in the table.
      if the word is not found returns -1,
      Otherwise returns the position of the word in the table */
-  while ( ( t->palavras[i][0] != '\0' ) && i < t->n_total_palavras ) {
-    if ( strcmp ( t->palavras[i], palavra ) == 0 )
+  while ( ( t->palavras[l -1][i][0] != '\0' ) && i < t->n_total_palavras ) {
+    if ( strcmp ( t->palavras[l - 1][i], palavra ) == 0 )
       return (i);
     i++;
   }
@@ -176,19 +176,19 @@ int NovaPalavra ( char *palavra, dic *t )
 void PreencheTabelaPalavras ( char *ficheiro, dic *t )
 {
   FILE *f;
-  int n;
+  int n, i, l;
   char *palavra;
-  int smol[t->bigboi];
+  int shmol[t->bigboi];
 
   f = AbreFicheiro ( ficheiro, "r" );
+  for(i = 0; i < t->bigboi; i++){
+    shmol[i] = t->tamanho[i];
+  }
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
-    if ( ( n = NovaPalavra ( palavra, &(*t) ) ) == -1 )	{
-      strcpy ( t->palavras[t->n_dist_palavras], palavra );
-      //t->ocorrencias[t->n_dist_palavras]++;
-      t->n_dist_palavras++;
-    }
-    else {
-      //t->ocorrencias[n]++;
+    if ( ( n = NovaPalavra ( palavra, t) ) == -1 )	{
+      l = strlen(palavra);
+      strcpy ( t->palavras[l-1][shmol[l-1]-1], palavra );
+      shmol[l-1]--;
     }
   }
   fclose ( f );
