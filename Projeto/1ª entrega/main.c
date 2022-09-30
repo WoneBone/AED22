@@ -230,6 +230,26 @@ void EscreveFicheiro ( char *ficheiro, dic *t )
   return;
 }
 
+/******************************************************************************
+ * main()
+ *
+ * Arguments:  argv - pointer to array of strings holding the arguments
+ *           
+ * Returns: (none)
+ * Side-Effects: none
+ *
+ * Description:reads the file .pals in argv[2] and determines what to do with that information
+ *
+ *****************************************************************************/
+void sub_1(argv[2]){
+  file p;
+
+  p = AbreFicheiro(argv[2], "r");//abertura de .pals
+  fscanf(p,)
+   
+
+}
+
 
 /******************************************************************************
  * main()
@@ -256,9 +276,14 @@ int main ( int argc, char **argv )
   AlocaTabelaPalavras ( argv[1], &st_palavras );
   PreencheTabelaPalavras ( argv[1],&st_palavras );
   EscreveFicheiro ( argv[1], &st_palavras );
-
+  sub_1 (argv[2]);
   return (0);
 }
+
+
+
+
+
 
 /* 
   Nunca abrir ficheiros 2 vezes
