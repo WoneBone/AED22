@@ -241,11 +241,23 @@ void EscreveFicheiro ( char *ficheiro, dic *t )
  * Description:reads the file .pals in argv[2] and determines what to do with that information
  *
  *****************************************************************************/
-void sub_1(argv[2]){
-  file p;
+void sub_1(char*ficheiro, dic *t){
+  FILE *p;
+  char word_1[t->bigboi], word_2[t->bigboi];
+  int n=0,grower=0;
+  
+  p = AbreFicheiro(ficheiro, "r");//abertura de .pals
 
-  p = AbreFicheiro(argv[2], "r");//abertura de .pals
-  fscanf(p,)
+  fscanf(p,"%s %s %d",word_1,word_2,&n);
+  
+  if (strlen(word_1)!=strlen(word_2)){
+    printf("palavras duvidosas\n");
+  }
+  if(n==1){
+    grower=strlen(word_1)+2;
+    
+    printf("Numero de palavras do memso tamanho:%d",t->tamanho[(grower-1)]);
+    }
    
 
 }
@@ -276,7 +288,7 @@ int main ( int argc, char **argv )
   AlocaTabelaPalavras ( argv[1], &st_palavras );
   PreencheTabelaPalavras ( argv[1],&st_palavras );
   EscreveFicheiro ( argv[1], &st_palavras );
-  sub_1 (argv[2]);
+  sub_1 (argv[2],&st_palavras);
   return (0);
 }
 
