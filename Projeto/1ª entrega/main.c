@@ -248,17 +248,17 @@ void sub_1(char*ficheiro, dic *t){
   
   p = AbreFicheiro(ficheiro, "r");//abertura de .pals
 
-  fscanf(p,"%s %s %d",word_1,word_2,&n);
+  while (fscanf(p,"%s %s %d",word_1,word_2,&n)!= EOF){;
   
-  if (strlen(word_1)!=strlen(word_2)){
-    printf("palavras duvidosas\n");
-  }
-  if(n==1){
-    grower=strlen(word_1)+2;
-    
-    printf("Numero de palavras do memso tamanho:%d",t->tamanho[(grower-1)]);
+    if (strlen(word_1)!=strlen(word_2)){
+      printf("palavras duvidosas\n");
     }
-   
+    if(n==1){
+      grower=strlen(word_1)+2;
+    
+      printf("Numero de palavras do mesmo tamanho:%d",t->tamanho[(grower-1)]);
+    }
+  } 
 
 }
 
