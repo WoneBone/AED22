@@ -88,9 +88,8 @@ FILE *AbreFicheiro ( char *nome, char *mode )
  *
  *****************************************************************************/
 
-void AlocaTabelaPalavras ( char *ficheiro, dic *t)
+void AlocaTabelaPalavras ( FILE *f, dic *t)
 {
-  FILE *f;
   char *palavra;
   int i, l,j;
 
@@ -100,7 +99,6 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
   for (i = 0; i < MAX_STR; i++) 
     t->tamanho[i] = 0;
 
-  f = AbreFicheiro ( ficheiro, "r" );
   while ( ( palavra = LePalavra ( f ) ) != NULL ) {
     t->n_total_palavras++;
     l = strlen( palavra );
@@ -130,6 +128,7 @@ void AlocaTabelaPalavras ( char *ficheiro, dic *t)
       t->palavras[i][j][0] = '\0';
     }
   }
+  rewind(f);
   return;
 }
 
@@ -173,14 +172,12 @@ int NovaPalavra ( char *palavra, dic *t )
  *
  *****************************************************************************/
 
-void PreencheTabelaPalavras ( char *ficheiro, dic *t )
+void PreencheTabelaPalavras ( FILE *f, dic *t )
 {
-  FILE *f;
   int n, i, l;
   char *palavra;
   int shmol[t->bigboi];
 
-  f = AbreFicheiro ( ficheiro, "r" );
   for(i = 0; i < t->bigboi; i++){
     shmol[i] = t->tamanho[i];
   }
@@ -191,7 +188,7 @@ void PreencheTabelaPalavras ( char *ficheiro, dic *t )
       shmol[l-1]--;
     }
   }
-  fclose ( f );
+  rewind(f);
   return;
 }
 
@@ -277,18 +274,39 @@ void sub_1(char*ficheiro, dic *t){
 
 int main ( int argc, char **argv )
 {
-  int i;
+  int modo;
   dic st_palavras;
+  FILE *p = NULL, *d = NULL;
+  char *word1, *word2;
 
   if ( argc < 2 ) {
     fprintf ( stderr, "ERROR: missing filename in argument!\n" );
     exit ( 6 );
   }
+  d = AbreFicheiro(argv[1], "r");
+  p = AbreFicheiro(argv[2], "r");
+  AlocaTabelaPalavras ( d, &st_palavras );
+  word1 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
+  word2 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
+  PreencheTabelaPalavras ( d,&st_palavras );
+  while(!feof(p)){
+    if (fscanf(p,"%s %s %d", word1, word2, &modo)!= 3){
+      fprintf(stderr, "Erro de leitura");
+      exit(-1);
+    }
+    if (modo == 1){
+      sub_1(word1);
+    }
+    else if (modo == 2){
+      sub_2(word1, word2);
+    }
+    else{
+      printf("Modo invalido \n\
+              Skipped %s %s", word1, word2);
+      continue;
 
-  AlocaTabelaPalavras ( argv[1], &st_palavras );
-  PreencheTabelaPalavras ( argv[1],&st_palavras );
-  EscreveFicheiro ( argv[1], &st_palavras );
-  sub_1 (argv[2],&st_palavras);
+    }
+  }
   return (0);
 }
 
