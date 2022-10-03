@@ -68,10 +68,10 @@ FILE *OutputFile(const char *nome, const char *term){
  * Description: Modo 1 de primeira entrega de projeto
  *
  *****************************************************************************/
-void sub_1(char *word, dic p, FILE* out){
+void sub_1(char *word, dic *p, FILE* out){
   int i = strlen(word), j;
 
-  j = p.tamanho[i-1];
+  j = p->tamanho[i-1];
 
   fprintf(out, "%s\t%d", word, j);
 
@@ -94,10 +94,14 @@ void sub_1(char *word, dic p, FILE* out){
 int main ( int argc, char **argv )
 {
   int modo = 0;
-  dic st_palavras;
+  dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
 
+  if (st_palavras == NULL){
+    fprintf(stderr, "MEMORY ALOCATION ERROR");
+    exit(-420);
+  }
   if ( argc < 2 ) {
     fprintf ( stderr, "ERROR: missing filename in argument!\n" );
     exit ( 6 );
@@ -108,10 +112,10 @@ int main ( int argc, char **argv )
   p = AbreFicheiro(argv[2], "r");
   out = OutputFile(argv[2], ".pals");
 
-  AlocaTabelaPalavras ( d, &st_palavras );
-  word1 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
-  word2 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
-  PreencheTabelaPalavras ( d, &st_palavras );
+  AlocaTabelaPalavras ( d, st_palavras );
+  word1 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
+  word2 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
+  PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
 
     if (modo == 1){
@@ -128,6 +132,10 @@ int main ( int argc, char **argv )
 
     }
   }
+  FreeTabelaPalavras(st_palavras);
+  free(st_palavras);
+  free(word1);
+  free(word2);
   fclose(d);
   fclose(p);
   fclose(out);

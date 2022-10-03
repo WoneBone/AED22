@@ -161,3 +161,26 @@ void PreencheTabelaPalavras ( FILE *f, dic *t )
   return;
 }
 
+/******************************************************************************
+ * AlocaTabelaPalavras()
+ *
+ * Arguments: ficheiro - pointer to string holding name of file to open
+ *            dic - pointer to structure where information will be saved
+ * Returns: (none)
+ * Side-Effects: none
+ *
+ * Description:
+ *
+ *****************************************************************************/
+
+void FreeTabelaPalavras ( dic *t)
+{
+    int i, j;
+    for(i = 0; i < t->bigboi; i++){
+        for(j = 0; j < t->tamanho[i]; j++) 
+            free(t->palavras[i][j]);
+        free(t->palavras[i]);
+    }
+    free(t->palavras);
+  return;
+}

@@ -16,3 +16,4 @@ FILE *AbreFicheiro ( char *nome, char *mode );
 void AlocaTabelaPalavras ( FILE *f, dic *t);
 int NovaPalavra ( char *palavra, dic *t );
 void PreencheTabelaPalavras ( FILE *f, dic *t );
+void FreeTabelaPalavras ( dic *t);
