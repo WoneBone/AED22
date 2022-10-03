@@ -106,7 +106,6 @@ void AlocaTabelaPalavras ( FILE *f, dic *t)
       t->bigboi = l;
     t->tamanho[l - 1]++;
   }
-  fclose ( f );
   printf ( "Words count: %d\n", t->n_total_palavras );
   t->palavras =(char***) malloc(sizeof(char**) * t->bigboi); //alocaçao de nº tabelas para cada tamanho
   if ( t->palavras == NULL ) {
@@ -160,6 +159,7 @@ int NovaPalavra ( char *palavra, dic *t )
 }
 
 
+
 /******************************************************************************
  * PreencheTabelaPalavras()
  *
@@ -191,7 +191,42 @@ void PreencheTabelaPalavras ( FILE *f, dic *t )
   rewind(f);
   return;
 }
+/******************************************************************************
+ * OutputFile()
+ *
+ * Arguments: nome - contant string with input file name to be changed
+ *        
+ * Returns: Output file in write mode as a FILE *
+ * Side-Effects: none
+ *
+ * Description: Função para abrir ficheiro com terminação term assumindo que term começa com .
+ *
+ *****************************************************************************/
 
+FILE *OutputFile(const char *nome, const char *term){
+  char *file, *aux;
+  FILE *out = NULL;
+
+  file = (char *) malloc(sizeof(char) * (strlen(nome) + strlen(".stats") + 1));
+  if (file == NULL){
+    fprintf(stderr, "ERRO DE ALOCAÇÃO DE MEMÓRIA");
+    exit(-1);
+  }
+
+  strcpy(file, nome);
+  aux = strrchr(file, '.');
+
+  if(strcmp(aux, term) != 0){
+    fprintf(stderr, "Formato de ficheiro incorreto");
+    exit(-69);
+  }
+
+  strcpy(aux, ".stats");
+
+  out = AbreFicheiro(file, "w");
+  free(file);
+  return out;
+}
 
 /******************************************************************************
  * EscreveFicheiro()
@@ -228,35 +263,26 @@ void EscreveFicheiro ( char *ficheiro, dic *t )
 }
 
 /******************************************************************************
- * main()
+ * sub_1
  *
- * Arguments:  argv - pointer to array of strings holding the arguments
+ * Arguments:  word - Palavra para referência de tamanho
+ *             p - Struct de dicionário
+ *             out - ficheiro onde dar print do output
  *           
  * Returns: (none)
  * Side-Effects: none
  *
- * Description:reads the file .pals in argv[2] and determines what to do with that information
+ * Description: Modo 1 de primeira entrega de projeto
  *
  *****************************************************************************/
-void sub_1(char*ficheiro, dic *t){
-  FILE *p;
-  char word_1[t->bigboi], word_2[t->bigboi];
-  int n=0,grower=0;
-  
-  p = AbreFicheiro(ficheiro, "r");//abertura de .pals
+void sub_1(char *word, dic p, FILE* out){
+  int i = strlen(word), j;
 
-  while (fscanf(p,"%s %s %d",word_1,word_2,&n)!= EOF){;
-  
-    if (strlen(word_1)!=strlen(word_2)){
-      printf("palavras duvidosas\n");
-    }
-    if(n==1){
-      grower=strlen(word_1)+2;
-    
-      printf("Numero de palavras do mesmo tamanho:%d",t->tamanho[(grower-1)]);
-    }
-  } 
+  j = p.tamanho[i-1];
 
+  fprintf(out, "%s\t%d", word, j);
+
+  return;  
 }
 
 
@@ -274,39 +300,44 @@ void sub_1(char*ficheiro, dic *t){
 
 int main ( int argc, char **argv )
 {
-  int modo;
+  int modo = 0;
   dic st_palavras;
-  FILE *p = NULL, *d = NULL;
+  FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
 
   if ( argc < 2 ) {
     fprintf ( stderr, "ERROR: missing filename in argument!\n" );
     exit ( 6 );
   }
+
+
   d = AbreFicheiro(argv[1], "r");
   p = AbreFicheiro(argv[2], "r");
+  out = OutputFile(argv[2], ".pals");
+
   AlocaTabelaPalavras ( d, &st_palavras );
   word1 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
   word2 = (char *) malloc(sizeof(char) * st_palavras.bigboi);
-  PreencheTabelaPalavras ( d,&st_palavras );
-  while(!feof(p)){
-    if (fscanf(p,"%s %s %d", word1, word2, &modo)!= 3){
-      fprintf(stderr, "Erro de leitura");
-      exit(-1);
-    }
+  PreencheTabelaPalavras ( d, &st_palavras );
+  while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
+
     if (modo == 1){
-      sub_1(word1);
+      sub_1(word1, st_palavras, out);
     }
     else if (modo == 2){
-      sub_2(word1, word2);
+      //sub_2(word1, word2);
+      continue;
     }
     else{
-      printf("Modo invalido \n\
+      fprintf(stdout, "Modo invalido \n\
               Skipped %s %s", word1, word2);
       continue;
 
     }
   }
+  fclose(d);
+  fclose(p);
+  fclose(out);
   return (0);
 }
 
