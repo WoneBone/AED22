@@ -102,24 +102,24 @@ void AlocaTabelaPalavras ( char *ficheiro, st_texto *t)
   fclose ( fp );
   printf ( "Words count: %d\n", (*t).n_total_palavras );
 
-  (*t).palavras =  /* -- INSERT code for memory allocation --*/;
+  (*t).palavras = (char**) malloc(sizeof(char*) * n_max_caracteres); /* -- INSERT code for memory allocation --*/;
   if ( (*t).palavras == NULL ) {
     fprintf ( stderr, "ERROR: not enough memory available!\n" );
     exit ( 2 );
   }
-  (*t).ocorrencias = /* -- INSERT code for memory allocation --*/;
+  (*t).ocorrencias = (char*) malloc(sizeof(char) * MAX_STR); /* -- INSERT code for memory allocation --*/;
   if ( (*t).ocorrencias == NULL ) {
     fprintf ( stderr, "ERROR: not enough memory available!\n" );
     exit ( 4 );
   }
   for ( i = 0; i < (*t).n_total_palavras; i++ )   {
-    (*t).palavras[i] =  /* -- INSERT code for memory allocation --*/;
+    (*t).palavras[i] = (char*) malloc(sizeof(char) * (*t).ocorrencias[i]);  /* -- INSERT code for memory allocation --*/;
     if ( (*t).palavras[i] == NULL ) {
       fprintf ( stderr, "ERROR: not enough memory available!\n" );
       exit ( 3 );
     }
-    (*t).palavras[i][0] = /* -- INSERT code to initialize table of strings  --*/ ;
-    (*t).ocorrencias[i] = /* -- INSERT code to initialize table  of counters --*/ ;
+    (*t).palavras[i][0] = '/0';/* -- INSERT code to initialize table of strings  --*/ ;
+    (*t).ocorrencias[i] = 0 ;/* -- INSERT code to initialize table  of counters --*/ ;
   }
   return;
 }
