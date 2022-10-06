@@ -89,9 +89,9 @@ char **bis (char *key, char **arr, int nmemb){
     k=k*2;
     printf("%d\n",j);
     if (i > 0)
-      j = (j + nmemb/k) ;
+      j = (j + nmemb/k)+1 ;
     else
-      j = (j - nmemb/k) ;
+      j = (j - nmemb/k)+1 ;
   }
   return &arr[j];
 }
