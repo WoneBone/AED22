@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
   char novaPal[DIM_MAX_PALAVRA];
   FILE *fpIn,*fpOut;
 
-  if(argc < 2)
+  if(argc < 3)
     Usage(argv[0]);
 
   nomeFicheiroIn = argv[1];
-  nomeFicheiroOut =(char *)malloc(sizeof(char)*(strlen(nomeFicheiroIn+10))); /* -- INSERT CODE to ALLOCATE MEMORY -- */
+  nomeFicheiroOut = (char *) malloc(sizeof(char)*(strlen(nomeFicheiroIn) + 10)); /* -- INSERT CODE to ALLOCATE MEMORY -- */
     if(nomeFicheiroOut == NULL)
       erroMemoria("Memory allocation for nomeFicheiroOut in main" );
 
@@ -92,11 +92,23 @@ int main(int argc, char *argv[])
   }
   /* write out words to output file */
   aux = lp;
-  while(aux != NULL) {
-    escreveUmaPalavra((t_palavra*) getItemLista(aux), fpOut);
-    aux = getProxElementoLista(aux);
+  if (strcmp(argv[2], "INICIO") == 0){
+    while(aux != NULL) {
+      escreveUmaPalavra((t_palavra*) getItemLista(aux), fpOut);
+      aux = getProxElementoLista(aux);
+    }
   }
-
+  else if (strcmp(argv[2],"FIM") == 0){
+    while(aux != NULL) {    
+      aux = getProxElementoLista(aux);
+    }
+    while(aux != lp) {
+      aux = throw_it_back(lp, aux);
+      escreveUmaPalavra((t_palavra*) getItemLista(aux), fpOut);
+    }
+  }
+  else
+    fprintf(stderr, "Valor inválido de orientação, em caso de dúvida consulte LGBTQIA+");
   numPalavrasDiferentes = numItensNaLista(lp);
   printf("Number of words = %d, Number of different words = %d\n",
          numTotalPalavras, numPalavrasDiferentes);

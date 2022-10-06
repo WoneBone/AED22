@@ -147,3 +147,21 @@ void libertaLista(t_lista *lp, void freeItem(Item)) {
 
   return;
 }
+/******************************************************************************
+ * libertaLista ()
+ *
+ * Arguments: lp - pointer to list
+ * Returns:  (void)
+ * Side-Effects: frees space occupied by list items
+ *
+ * Description: free list
+ *
+ *****************************************************************************/
+ t_lista *throw_it_back(t_lista *head, t_lista *element){
+  t_lista *aux = head;
+
+  while(getProxElementoLista(aux) != element){
+    aux = getProxElementoLista(aux);
+  }
+  return aux;
+ }

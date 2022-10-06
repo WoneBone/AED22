@@ -55,6 +55,7 @@ FILE *OutputFile(const char *nome, const char *term){
 }
 
 
+
 /******************************************************************************
  * sub_1
  *
@@ -78,6 +79,64 @@ void sub_1(char *word, dic *p, FILE* out){
   return;  
 }
 
+char **bis (char *key, char **arr, int nmemb){
+  char *word = (char *) malloc((strlen(key) + 1) * sizeof(char));
+  int i,k = 2, j = nmemb/k;
+  
+  if (word == NULL)
+    exit(-69);
+  while (i = strcmp(key, arr[j]) != 0){
+    k=k*2;
+    printf("%d\n",j);
+    if (i > 0)
+      j = (j + nmemb/k) ;
+    else
+      j = (j - nmemb/k) ;
+  }
+  return &arr[j];
+}
+
+int compar(const void * a, const void *b){
+  return strcmp(* (char * const *) a, * (char * const *) b);
+}
+/******************************************************************************
+ * sub_2
+ *
+ * Arguments:  word - Palavra para referência de tamanho
+ *             p - Struct de dicionário
+ *             out - ficheiro onde dar print do output
+ *           
+ * Returns: (none)
+ * Side-Effects: none
+ *
+ * Description: Modo 1 de primeira entrega de projeto
+ *
+ *****************************************************************************/
+void sub_2(char *word, dic *p, FILE* out){
+  int i = strlen(word) -1, j;
+  static int messi[MAX_STR + 1];
+  char **found;
+
+  if (messi[MAX_STR] != 1){
+    for (j = 0; j < MAX_STR; j ++){
+      messi[j] = 0;
+    }
+    messi[MAX_STR] = 1;
+  } 
+  if(messi[i] == 0){
+    qsort(p->palavras[i], (p->tamanho[i]), sizeof(char*), compar);
+    puts(p->palavras[i][0]);
+    puts(p->palavras[i][3000]);
+    messi[i] = 1;
+  }
+
+  found = bis(word, p->palavras[i], p->tamanho[i]);
+  j = (found - p->palavras[i]);
+
+  fprintf(out, "%s\t%d\n", word, j);
+
+  return;  
+}
 
 /******************************************************************************
  * main()
@@ -122,7 +181,9 @@ int main ( int argc, char **argv )
       sub_1(word1, st_palavras, out);
     }
     else if (modo == 2){
-      //sub_2(word1, word2);
+      sub_2(word1, st_palavras, out);
+      sub_2(word2, st_palavras, out);
+      
       continue;
     }
     else{
