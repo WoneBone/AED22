@@ -74,7 +74,7 @@ void sub_1(char *word, dic *p, FILE* out){
 
   j = p->tamanho[i-1];
 
-  fprintf(out, "%s\t%d", word, j);
+  fprintf(out, "%s\t%d\n", word, j);
 
   return;  
 }
@@ -183,6 +183,7 @@ int main ( int argc, char **argv )
 
     if (modo == 1){
       sub_1(word1, st_palavras, out);
+      fprintf(out,"\n");
     }
     else if (modo == 2){
       sub_2(word1, st_palavras, out);
