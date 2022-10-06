@@ -81,22 +81,28 @@ void sub_1(char *word, dic *p, FILE* out){
 
 char **bis (char *key, char **arr, int nmemb){
   char *word = (char *) malloc((strlen(key) + 1) * sizeof(char));
-  int i,k = 2, j = nmemb/k;
+  int i, l = 0, u = nmemb, j = (u + l)/2;
   
   if (word == NULL)
     exit(-69);
-  while (i = strcmp(key, arr[j]) != 0){
-    k=k*2;
-    printf("%d\n",j);
-    if (i > 0)
-      j = (j + nmemb/k)+1 ;
-    else
-      j = (j - nmemb/k)+1 ;
+  while ((i = strcmp(key, arr[j])) != 0){
+    if (i > 0){
+      l = j;
+      j = (u + l)/2;
+      continue;
+    }
+    else{
+      u = j;
+      j = (u + l)/2;
+      continue;
+    }
+
   }
+  free(word);
   return &arr[j];
 }
 
-int compar(const void * a, const void *b){
+int compar(const void * a, const void *b){  
   return strcmp(* (char * const *) a, * (char * const *) b);
 }
 /******************************************************************************
@@ -125,8 +131,6 @@ void sub_2(char *word, dic *p, FILE* out){
   } 
   if(messi[i] == 0){
     qsort(p->palavras[i], (p->tamanho[i]), sizeof(char*), compar);
-    puts(p->palavras[i][0]);
-    puts(p->palavras[i][3000]);
     messi[i] = 1;
   }
 
@@ -183,6 +187,7 @@ int main ( int argc, char **argv )
     else if (modo == 2){
       sub_2(word1, st_palavras, out);
       sub_2(word2, st_palavras, out);
+      fprintf(out, "\n");
       
       continue;
     }
