@@ -40,8 +40,7 @@ FILE *AbreFicheiro ( char *nome, char *mode )
   FILE *f;
   f = fopen ( nome, mode );
   if ( f == NULL ) {
-    fprintf ( stderr, "ERROR: It is not possible to open file %s!\n", nome );
-    exit ( 1 );
+    exit ( -420 );
     /* Error messages are sent to the stderr channel.
        Use an exit number different from 0 (zero) in case of error.*/
   }
@@ -80,20 +79,17 @@ void AlocaTabelaPalavras ( FILE *f, dic *t)
   }
   t->palavras =(char***) malloc(sizeof(char**) * t->bigboi); //alocaçao de nº tabelas para cada tamanho
   if ( t->palavras == NULL ) {
-    fprintf ( stderr, "ERROR: not enough memory available!\n" );
-    exit ( 2 );
+    exit ( -1 );
   }
   for(i = 0; i < t->bigboi; i++){
     t->palavras[i] = (char**) malloc(sizeof(char*) * t->tamanho[i]); //alocaçao de nº de palavras para cada tamanho
     if ( t->palavras[i] == NULL ) {
-      fprintf ( stderr, "ERROR: not enough memory available!\n" );
-      exit ( 2 );
+      exit (-1 );
     }
     for(j = 0; j < t->tamanho[i]; j++){ //alocaçao de tamanho para cada palavra
       t->palavras[i][j] = (char*) malloc(sizeof(char)*(i + 2));
       if ( t->palavras[i][j] == NULL ) {
-        fprintf ( stderr, "ERROR: not enough memory available!\n" );
-        exit ( 2 );
+        exit ( -1);
       }
       t->palavras[i][j][0] = '\0';
     }

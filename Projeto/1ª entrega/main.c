@@ -35,7 +35,6 @@ FILE *OutputFile(const char *nome, const char *term){
 
   file = (char *) malloc(sizeof(char) * (strlen(nome) + strlen(".stats") + 1));
   if (file == NULL){
-    fprintf(stderr, "ERRO DE ALOCAÇÃO DE MEMÓRIA");
     exit(-1);
   }
 
@@ -43,8 +42,7 @@ FILE *OutputFile(const char *nome, const char *term){
   aux = strrchr(file, '.');
 
   if(strcmp(aux, term) != 0){
-    fprintf(stderr, "Formato de ficheiro incorreto");
-    exit(-69);
+    exit(-420);
   }
 
   strcpy(aux, ".stats");
@@ -162,12 +160,10 @@ int main ( int argc, char **argv )
   char *word1, *word2;
 
   if (st_palavras == NULL){
-    fprintf(stderr, "MEMORY ALOCATION ERROR");
-    exit(-420);
+    exit(-1);
   }
   if ( argc < 2 ) {
-    fprintf ( stderr, "ERROR: missing filename in argument!\n" );
-    exit ( 6 );
+    exit ( -69 );
   }
 
 
@@ -193,8 +189,7 @@ int main ( int argc, char **argv )
       continue;
     }
     else{
-      fprintf(stdout, "Modo invalido \n\
-              Skipped %s %s", word1, word2);
+      fprintf(out, "%s %s %d\n\n", word1, word2, modo);
       continue;
 
     }
