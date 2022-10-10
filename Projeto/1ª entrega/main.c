@@ -76,7 +76,19 @@ void sub_1(char *word, dic *p, FILE* out){
 
   return;  
 }
-
+/******************************************************************************
+ * bis
+ *
+ * Arguments:  key - palavra que se procura
+ *             arr - array de procura
+ *             nmemb - número de membros do arr
+ *           
+ * Returns: apontador para a posição da palavra no arr 
+ * Side-Effects: none
+ *
+ * Description: Binary search 
+ *
+ *****************************************************************************/
 char **bis (char *key, char **arr, int nmemb){
   char *word = (char *) malloc((strlen(key) + 1) * sizeof(char));
   int i, l = 0, u = nmemb, j = (u + l)/2;
@@ -84,6 +96,9 @@ char **bis (char *key, char **arr, int nmemb){
   if (word == NULL)
     exit(-69);
   while ((i = strcmp(key, arr[j])) != 0){
+    if (j == u || j == l){
+      return NULL;
+    }
     if (i > 0){
       l = j;
       j = (u + l)/2;
@@ -116,28 +131,46 @@ int compar(const void * a, const void *b){
  * Description: Modo 1 de primeira entrega de projeto
  *
  *****************************************************************************/
-void sub_2(char *word, dic *p, FILE* out){
+int sub_2(char *word, dic *p, FILE* out){
   int i = strlen(word) -1, j;
-  static int messi[MAX_STR + 1];
   char **found;
 
-  if (messi[MAX_STR] != 1){
+  found = bis(word, p->palavras[i], p->tamanho[i]);
+  if (found == NULL)
+    return -1;
+
+  j = (found - p->palavras[i]);
+
+  fprintf(out, "%s\t%d\n", word, j);
+
+  return 0;  
+}
+/******************************************************************************
+ * bis
+ *
+ * Arguments:  key - palavra que se procura
+ *             arr - array de procura
+ *             nmemb - número de membros do arr
+ *           
+ * Returns: apontador para a posição da palavra no arr 
+ * Side-Effects: none
+ *
+ * Description: Binary search 
+ *
+ *****************************************************************************/
+int sort (dic *pp, int size){
+  int j;
+    static int messi[MAX_STR + 1];
+    if (messi[MAX_STR] != 1){
     for (j = 0; j < MAX_STR; j ++){
       messi[j] = 0;
     }
     messi[MAX_STR] = 1;
   } 
-  if(messi[i] == 0){
-    qsort(p->palavras[i], (p->tamanho[i]), sizeof(char*), compar);
-    messi[i] = 1;
+  if(messi[size - 1] == 0){
+    qsort(pp->palavras[size -1], (pp->tamanho[size -1]), sizeof(char*), compar);
+    messi[size -1] = 1;
   }
-
-  found = bis(word, p->palavras[i], p->tamanho[i]);
-  j = (found - p->palavras[i]);
-
-  fprintf(out, "%s\t%d\n", word, j);
-
-  return;  
 }
 
 /******************************************************************************
@@ -176,22 +209,22 @@ int main ( int argc, char **argv )
   word2 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
   PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
-
+    sort(st_palavras, strlen(word1));
+    if (checkp(word1, word2, modo, st_palavras) == -1){
+      fprintf("%s %s %d \n \n", word1, word2, modo);
+      continue;
+    }
     if (modo == 1){
       sub_1(word1, st_palavras, out);
       fprintf(out,"\n");
     }
     else if (modo == 2){
+      
       sub_2(word1, st_palavras, out);
       sub_2(word2, st_palavras, out);
       fprintf(out, "\n");
       
       continue;
-    }
-    else{
-      fprintf(out, "%s %s %d\n\n", word1, word2, modo);
-      continue;
-
     }
   }
   FreeTabelaPalavras(st_palavras);
