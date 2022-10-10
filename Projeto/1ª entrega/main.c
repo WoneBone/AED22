@@ -146,11 +146,11 @@ int sub_2(char *word, dic *p, FILE* out){
   return 0;  
 }
 /******************************************************************************
- * bis
+ * sort
  *
- * Arguments:  key - palavra que se procura
- *             arr - array de procura
- *             nmemb - número de membros do arr
+ * Arguments:  pp - dicionario a ser ordenado
+ *             size - tamanho a ser ordenado
+ *             
  *           
  * Returns: apontador para a posição da palavra no arr 
  * Side-Effects: none
@@ -158,19 +158,42 @@ int sub_2(char *word, dic *p, FILE* out){
  * Description: Binary search 
  *
  *****************************************************************************/
-int sort (dic *pp, int size){
-  int j;
-    static int messi[MAX_STR + 1];
-    if (messi[MAX_STR] != 1){
-    for (j = 0; j < MAX_STR; j ++){
+void sort (dic *pp, int size){
+    static int j = 0;
+    static int messi[MAX_STR];
+    while(j < MAX_STR){
       messi[j] = 0;
-    }
-    messi[MAX_STR] = 1;
-  } 
+      j++;
+    } 
   if(messi[size - 1] == 0){
+
     qsort(pp->palavras[size -1], (pp->tamanho[size -1]), sizeof(char*), compar);
     messi[size -1] = 1;
+
   }
+}
+/******************************************************************************
+ *checkpp
+ *
+ * Arguments: word1 - primeira palavra do problema
+ *            word2 - segunda palavra do problema
+ *            modo - modo de jogo do problema
+ *            pp - ponteiro para dic de referncia
+ * 
+ * Returns: -1 if wrong 0 if right
+ * Side-Effects: none
+ *
+ * Description:
+ *
+ *****************************************************************************/
+int checkpp(char *word1, char *word2, int modo, dic *pp){
+  if (modo != 1 && modo != 2) return -1;
+  
+  else if (strlen(word1) != strlen(word2)) return -1;
+
+  else if ((bis(word1, pp->palavras, pp->tamanho[strlen(word1 -1)]) == NULL) || (bis(word2, pp->palavras, pp->tamanho[strlen(word1 -1)]) == NULL)) return -1;
+
+  return 0;
 }
 
 /******************************************************************************
@@ -210,8 +233,8 @@ int main ( int argc, char **argv )
   PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
     sort(st_palavras, strlen(word1));
-    if (checkp(word1, word2, modo, st_palavras) == -1){
-      fprintf("%s %s %d \n \n", word1, word2, modo);
+    if (checkpp(word1, word2, modo, st_palavras) == -1){
+      fprintf(out, "%s %s %d \n \n", word1, word2, modo);
       continue;
     }
     if (modo == 1){
