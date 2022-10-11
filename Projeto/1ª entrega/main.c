@@ -169,7 +169,7 @@ void sort (dic *pp, int size){
 
     qsort(pp->palavras[size -1], (pp->tamanho[size -1]), sizeof(char*), compar);
     messi[size -1] = 1;
-
+    
   }
 }
 /******************************************************************************
@@ -191,7 +191,7 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
   
   else if (strlen(word1) != strlen(word2)) return -1;
 
-  else if ((bis(word1, pp->palavras, pp->tamanho[strlen(word1 -1)]) == NULL) || (bis(word2, pp->palavras, pp->tamanho[strlen(word1 -1)]) == NULL)) return -1;
+  else if ((bis(word1, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL) || (bis(word2, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL)) return -1;
 
   return 0;
 }
@@ -210,7 +210,7 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
 
 int main ( int argc, char **argv )
 {
-  int modo = 0;
+  int modo = 0,i=0;
   dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
@@ -245,6 +245,11 @@ int main ( int argc, char **argv )
       
       sub_2(word1, st_palavras, out);
       sub_2(word2, st_palavras, out);
+      while((st_palavras->palavras[strlen(word1)-1][i])!=NULL){
+        printf("%s",st_palavras->palavras[strlen(word1)-1][i]);
+        i++;
+      }
+      
       fprintf(out, "\n");
       
       continue;

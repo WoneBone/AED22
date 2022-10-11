@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------
 
 CC=gcc
-CFLAGS=-g -Wall -std=c99 -O3
+CFLAGS=-g -Wall -std=c99 
 
 Wordmutations: main.o dichandl.o
 	$(CC) $(CFLAGS) -o Wordmutations main.o dichandl.o
