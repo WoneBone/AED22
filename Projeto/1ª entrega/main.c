@@ -133,19 +133,19 @@ int compar(const void * a, const void *b){
  * Description: Modo 1 de primeira entrega de projeto
  *
  *****************************************************************************/
-int sub_2(char *word, dic *p, FILE* out){
+void sub_2(char *word, dic *p, FILE* out){
   int i = strlen(word) -1, j;
   char **found;
 
   found = bis(word, p->palavras[i], p->tamanho[i]);
   if (found == NULL)
-    return -1;
+    exit(-1);
 
   j = (found - p->palavras[i]);
 
   fprintf(out, "%s %d\n", word, j);
 
-  return 0;  
+  return;  
 }
 /******************************************************************************
  * sort
