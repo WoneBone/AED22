@@ -99,6 +99,7 @@ char **bis (char *key, char **arr, int nmemb){
     exit(-69);
   while ((i = strcmp(key, arr[j])) != 0){
     if (l== u){
+      free(word);
       return NULL;
     }
     if (i > 0){
@@ -190,9 +191,13 @@ void sort (dic *pp, int size){
  *****************************************************************************/
 int checkpp(char *word1, char *word2, int modo, dic *pp){
   
-  if (modo != 1 && modo != 2 && strlen(word1) > pp->bigboi) return -1;
+  if (modo != 1 && modo != 2) return -1;
+
+  else if (strlen(word1) > pp->bigboi) return -1;
   
   else if (strlen(word1) != strlen(word2)) return -1;
+
+  else if(pp->tamanho[strlen(word1)-1] <= 0) return -1;
 
   else if ((bis(word1, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL) || (bis(word2, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL)) return -1;
   return 0;
@@ -230,8 +235,8 @@ int main ( int argc, char **argv )
   out = OutputFile(argv[2], ".pals");
 
   AlocaTabelaPalavras ( d, st_palavras );
-  word1 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
-  word2 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
+  word1 = (char *) malloc(sizeof(char) * (MAX_STR + 1));
+  word2 = (char *) malloc(sizeof(char) * (MAX_STR+ 1));
   PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo) == 3){
     sort(st_palavras, strlen(word1));
