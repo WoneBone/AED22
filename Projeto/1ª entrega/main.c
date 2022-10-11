@@ -72,7 +72,7 @@ void sub_1(char *word, dic *p, FILE* out){
 
   j = p->tamanho[i-1];
 
-  fprintf(out, "%s\t%d\n", word, j);
+  fprintf(out, "%s %d\n", word, j);
 
   return;  
 }
@@ -141,7 +141,7 @@ int sub_2(char *word, dic *p, FILE* out){
 
   j = (found - p->palavras[i]);
 
-  fprintf(out, "%s\t%d\n", word, j);
+  fprintf(out, "%s %d\n", word, j);
 
   return 0;  
 }
@@ -187,11 +187,16 @@ void sort (dic *pp, int size){
  *
  *****************************************************************************/
 int checkpp(char *word1, char *word2, int modo, dic *pp){
-  if (modo != 1 && modo != 2) return -1;
+  
+  if (modo != 1 && modo != 2 && strlen(word1) > pp->bigboi) return -1;
   
   else if (strlen(word1) != strlen(word2)) return -1;
 
+<<<<<<< Updated upstream
   else if ((bis(word1, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL) || (bis(word2, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL)) return -1;
+=======
+  else if ((bis(word1, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL) || (bis(word2, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL)) return -1;
+>>>>>>> Stashed changes
 
   return 0;
 }
