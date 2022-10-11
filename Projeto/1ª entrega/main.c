@@ -96,16 +96,16 @@ char **bis (char *key, char **arr, int nmemb){
   if (word == NULL)
     exit(-69);
   while ((i = strcmp(key, arr[j])) != 0){
-    if (j == u || j == l){
+    if (l== u){
       return NULL;
     }
     if (i > 0){
-      l = j;
+      l = j + 1;
       j = (u + l)/2;
       continue;
     }
     else{
-      u = j;
+      u = j - 1;
       j = (u + l)/2;
       continue;
     }
