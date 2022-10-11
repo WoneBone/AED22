@@ -1,14 +1,11 @@
 /******************************************************************************
  *
- * File Name: palavras.c
- *	      (c) 2012 AED
- * Authors:    AED Team
- * Last modified:
- * Revision:  v2.0
+ * File Name: main.c
+ *	
+ * Authors:   Yo moma
+ * Last modified: 420/69
+ * Revision:  check git
  *
- * COMMENTS:    Version with no globals variables
- *		Passing structure for functions
- *		More compact test for EOF
  *
  *****************************************************************************/
 
@@ -40,9 +37,9 @@ FILE *OutputFile(const char *nome, const char *term){
 
   strcpy(file, nome);
   aux = strrchr(file, '.');
-  if(aux == NULL)
+  if(aux == NULL){   
     exit(-420);
-
+  }
   if(strcmp(aux, term) != 0){
     exit(-420);
   }
@@ -93,12 +90,12 @@ void sub_1(char *word, dic *p, FILE* out){
  *****************************************************************************/
 char **bis (char *key, char **arr, int nmemb){
   char *word = (char *) malloc((strlen(key) + 1) * sizeof(char));
-  int i, l = 0, u = nmemb, j = (u + l)/2;
+  int i, l = 0, u = nmemb -1, j = (u + l)/2;
   
   if (word == NULL)
     exit(-69);
   while ((i = strcmp(key, arr[j])) != 0){
-    if (l== u){
+    if (l>= u){
       free(word);
       return NULL;
     }
@@ -267,14 +264,3 @@ int main ( int argc, char **argv )
   return (0);
 }
 
-
-
-
-
-
-/* 
-  Nunca abrir ficheiros 2 vezes
-  Alocação de memória excessíva
-  Sem frees, mas não é relevante no ambito da aula
-  Optimizar procura 
-*/

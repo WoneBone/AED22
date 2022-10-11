@@ -1,14 +1,11 @@
 /******************************************************************************
  *
- * File Name: palavras.c
- *	      (c) 2012 AED
- * Authors:    AED Team
- * Last modified:
- * Revision:  v2.0
+ * File Name: main.c
+ *	
+ * Authors:   Yo moma
+ * Last modified: 420/69
+ * Revision:  check git
  *
- * COMMENTS:    Version with no globals variables
- *		Passing structure for functions
- *		More compact test for EOF
  *
  *****************************************************************************/
 
@@ -40,7 +37,9 @@ FILE *OutputFile(const char *nome, const char *term){
 
   strcpy(file, nome);
   aux = strrchr(file, '.');
-
+  if(aux == NULL){   
+    exit(-420);
+  }
   if(strcmp(aux, term) != 0){
     exit(-420);
   }
@@ -91,12 +90,13 @@ void sub_1(char *word, dic *p, FILE* out){
  *****************************************************************************/
 char **bis (char *key, char **arr, int nmemb){
   char *word = (char *) malloc((strlen(key) + 1) * sizeof(char));
-  int i, l = 0, u = nmemb, j = (u + l)/2;
+  int i, l = 0, u = nmemb -1, j = (u + l)/2;
   
   if (word == NULL)
     exit(-69);
   while ((i = strcmp(key, arr[j])) != 0){
-    if (l== u){
+    if (l>= u){
+      free(word);
       return NULL;
     }
     if (i > 0){
@@ -131,19 +131,19 @@ int compar(const void * a, const void *b){
  * Description: Modo 1 de primeira entrega de projeto
  *
  *****************************************************************************/
-int sub_2(char *word, dic *p, FILE* out){
+void sub_2(char *word, dic *p, FILE* out){
   int i = strlen(word) -1, j;
   char **found;
 
   found = bis(word, p->palavras[i], p->tamanho[i]);
   if (found == NULL)
-    return -1;
+    exit(-1);
 
   j = (found - p->palavras[i]);
 
   fprintf(out, "%s %d\n", word, j);
 
-  return 0;  
+  return;  
 }
 /******************************************************************************
  * sort
@@ -188,9 +188,13 @@ void sort (dic *pp, int size){
  *****************************************************************************/
 int checkpp(char *word1, char *word2, int modo, dic *pp){
   
-  if (modo != 1 && modo != 2 && strlen(word1) > pp->bigboi) return -1;
+  if (modo != 1 && modo != 2) return -1;
+
+  else if (strlen(word1) > pp->bigboi) return -1;
   
   else if (strlen(word1) != strlen(word2)) return -1;
+
+  else if(pp->tamanho[strlen(word1)-1] <= 0) return -1;
 
   else if ((bis(word1, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL) || (bis(word2, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL)) return -1;
   return 0;
@@ -228,10 +232,10 @@ int main ( int argc, char **argv )
   out = OutputFile(argv[2], ".pals");
 
   AlocaTabelaPalavras ( d, st_palavras );
-  word1 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
-  word2 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
+  word1 = (char *) malloc(sizeof(char) * (MAX_STR + 1));
+  word2 = (char *) malloc(sizeof(char) * (MAX_STR+ 1));
   PreencheTabelaPalavras ( d, st_palavras );
-  while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
+  while(fscanf(p,"%s %s %d", word1, word2, &modo) == 3){
     sort(st_palavras, strlen(word1));
     if (checkpp(word1, word2, modo, st_palavras) == -1){
       fprintf(out, "%s %s %d \n \n", word1, word2, modo);
@@ -260,14 +264,3 @@ int main ( int argc, char **argv )
   return (0);
 }
 
-
-
-
-
-
-/* 
-  Nunca abrir ficheiros 2 vezes
-  Alocação de memória excessíva
-  Sem frees, mas não é relevante no ambito da aula
-  Optimizar procura 
-*/
