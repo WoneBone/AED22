@@ -40,6 +40,8 @@ FILE *OutputFile(const char *nome, const char *term){
 
   strcpy(file, nome);
   aux = strrchr(file, '.');
+  if(aux == NULL)
+    exit(-420);
 
   if(strcmp(aux, term) != 0){
     exit(-420);
@@ -210,7 +212,7 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
 
 int main ( int argc, char **argv )
 {
-  int modo = 0,i=0;
+  int modo = 0;
   dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
@@ -231,7 +233,7 @@ int main ( int argc, char **argv )
   word1 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
   word2 = (char *) malloc(sizeof(char) * (st_palavras->bigboi + 1));
   PreencheTabelaPalavras ( d, st_palavras );
-  while(fscanf(p,"%s %s %d", word1, word2, &modo)== 3){
+  while(fscanf(p,"%s %s %d", word1, word2, &modo) == 3){
     sort(st_palavras, strlen(word1));
     if (checkpp(word1, word2, modo, st_palavras) == -1){
       fprintf(out, "%s %s %d \n \n", word1, word2, modo);
@@ -245,11 +247,6 @@ int main ( int argc, char **argv )
       
       sub_2(word1, st_palavras, out);
       sub_2(word2, st_palavras, out);
-      while((st_palavras->palavras[strlen(word1)-1][i])!=NULL){
-        printf("%s",st_palavras->palavras[strlen(word1)-1][i]);
-        i++;
-      }
-      
       fprintf(out, "\n");
       
       continue;
