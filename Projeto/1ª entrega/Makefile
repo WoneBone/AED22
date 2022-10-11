@@ -4,7 +4,7 @@
 #    make
 # To run tests:
 #    make t
-#
+# NÃO ESQUECER DE MUDAR -G PARA -O3
 # NOTE:
 # In case of trouble with the shell for loop, GNU Make has 'foreach':
 #	$(foreach file,$(FILES),./labconn $(file);)
@@ -14,8 +14,9 @@
 CC=gcc
 CFLAGS=-g -Wall -std=c99 
 
+
 Wordmutations: main.o dichandl.o
-	$(CC) $(CFLAGS) -o Wordmutations main.o dichandl.o
+	$(CC) $(CFLAGS) -o wrdmttns main.o dichandl.o
 
 main.o: main.c dichandl.h 
 	$(CC) -c $(CFLAGS) main.c

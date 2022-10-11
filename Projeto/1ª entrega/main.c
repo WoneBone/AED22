@@ -192,12 +192,7 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
   
   else if (strlen(word1) != strlen(word2)) return -1;
 
-<<<<<<< Updated upstream
-  else if ((bis(word1, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL) || (bis(word2, (pp->palavras[strlen(word1 -1)]), pp->tamanho[strlen(word1 -1)]) == NULL)) return -1;
-=======
   else if ((bis(word1, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL) || (bis(word2, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL)) return -1;
->>>>>>> Stashed changes
-
   return 0;
 }
 
