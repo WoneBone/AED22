@@ -36,7 +36,7 @@ int OP_CNT = 0;     /* global variable, to simplify complexity assessment */
  * Returns: (void)
  * Side-Effects: table is sorted in place
  *
- * Description: implements "some" sorting algorithm for abstract type (Item),
+ * Description: implements "some" sorting (Miguel bolhas) algorithm for abstract type (Item),
  *       using also an abstract type comparison function (*less)
  *           a[] - array of abstract type Item to be sorted
  *           l - index of first element in the array to be sorted
@@ -44,7 +44,7 @@ int OP_CNT = 0;     /* global variable, to simplify complexity assessment */
  *           (*less)(Item,Item) - abstract type comparison function
  *****************************************************************************/
 
-void sort(Item arr[], int l, int r, int (*less) (Item, Item))
+ void sort(Item arr[], int l, int r, int (*less) (Item, Item))
 {
   int swapped = 1;
   int i, j = 0;
@@ -60,12 +60,13 @@ void sort(Item arr[], int l, int r, int (*less) (Item, Item))
 
         swapped = 1;
       }
+      ++OP_CNT;
     }
     j++;
   }
 
   return;
-}
+} 
 
 
 /******************************************************************************
@@ -114,12 +115,38 @@ int main(int argc, char **argv)
 
    if ((criterio == alphabetic) && (sentido == ascending)) {
 
-      /*==== TODO ====*/
-      /* -- sort(....); -- */
+     sort((void **)wordtab, 0,numWords -1 ,  LessAlphabetic);
 
    }
+   
    /* other user options */
    /*==== TODO ====*/
+   else if ((criterio == length) && (sentido == ascending)) {
+
+     sort((void **) wordtab, 0,numWords -1 ,  LessLength);
+
+   }
+   else if ((criterio == occurrences) && (sentido == ascending)) {
+
+     sort((void **)wordtab, 0,numWords -1 ,  LessNumUses);
+
+   }
+   else if ((criterio == alphabetic) && (sentido == descending)) {
+
+     sort((void **)wordtab, 0,numWords -1 ,  notAlphabetic);
+
+   }
+   
+   else if ((criterio == length) && (sentido == descending)) {
+
+     sort((void **) wordtab, 0,numWords -1 ,  notLength);
+
+   }
+   else if ((criterio == occurrences) && (sentido == descending)) {
+
+     sort((void **)wordtab, 0,numWords -1 ,  notNumUses);
+
+   }
 
    /* ---------------------------------------- */
    printf("Accesses count for sort: %d\n", OP_CNT);
@@ -129,8 +156,8 @@ int main(int argc, char **argv)
 
    /* -- Insert code to call functions to free allocated memory -- */
 
-   /*==== TODO ====*/
-
+   FreeWordArray(&wordtab, numWords);
+    
    /* ------------------------------------------------------------ */
 
    return 0;

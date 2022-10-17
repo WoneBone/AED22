@@ -38,5 +38,9 @@ void FreeWordArray(WordTab *t, int numWords);
 int  LessAlphabetic(Item a, Item b);
 int  LessNumUses(Item a, Item b);
 int  LessLength(Item a, Item b);
+int notAlphabetic(Item a , Item b);
+int notLength(Item a , Item b);
+int notNumUses(Item a , Item b);
+
 
 #endif
