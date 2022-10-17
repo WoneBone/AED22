@@ -31,18 +31,22 @@ int partition (Item arr[], int l, int r, int (*less)(Item, Item)){
    Item v, tmp;
    v = arr[r]; i = l-1; j = r;
    while(1) {
-      while (less(arr[++i], v));
-      while (less(v, arr[--j]))
+      while (less(arr[++i], v)) OP_CNT++;
+      while (less(v, arr[--j])){
          if (j == l) break;
+         OP_CNT++;
+      }
       if (i >= j) break;
 
       tmp = arr[i];
       arr[i] = arr[j];
       arr[j] = tmp;
+      OP_CNT +=4;
    }
       tmp = arr[i];
       arr[i] = arr[r];
       arr[r] = tmp;
+      OP_CNT +=4;
    return i;
 }
 /******************************************************************************
