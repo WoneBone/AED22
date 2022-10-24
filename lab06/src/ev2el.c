@@ -29,8 +29,8 @@ typedef struct _twint {
 
 
 typedef struct _nodeS {
-  int node;
-  /* could add additional information here */
+  twint node;
+
 } NodeS;
 
 
@@ -85,54 +85,65 @@ void memoryError(char *msg) {
 *
 * Description: does a BFS on the graph described by the list of adjacencies
 *              reachable through listv and prints nodes as it finds them
-*****************************************************************************/
+**********************************  NodeS *next;*******************************************/
 
 void doBFS(LinkedList **listv, int sn, int nv) {
-  int numInqueue = 0, ni;
+   int numInqueue = 0;
   int *inqueue;
-  NodeS *fakeNodes, *Ns;
+  int *Ns;
   LinkedList *lp;
   twint *pint;
   Queue *BFSqueue;
 
-  inqueue = (int*) malloc(nv * sizeof(int));
+  inqueue = (int*) calloc(nv , sizeof(int));
   if (inqueue == ((int*)NULL))
     memoryError("Cannot allocate memory for inqueue nodes.");
-  for (ni = 0; ni < nv; ni++)
-    inqueue[ni] = 0;
 
-  fakeNodes = (NodeS*) malloc(nv * sizeof(NodeS));
+ /*  fakeNodes = (NodeS*) alloc(nv * sizeof(NodeS));
   if (fakeNodes == ((NodeS*)NULL))
     memoryError("Cannot allocate memory for fake nodes.");
   for (ni = 0; ni < nv; ni++)
-    fakeNodes[ni].node = ni;
+    fakeNodes[ni].node = ni;  */
 
   BFSqueue = newQueue(nv);
 
   /* put starting node in queue */
-  insertQueue(BFSqueue, (Item) &fakeNodes[sn]);
+  insertQueue(BFSqueue, (Item) &sn);
   inqueue[sn] = 1;
-  fprintf(stdout, "%d ", sn);
   numInqueue++;
   for ( ; numInqueue < nv; ) {
     /* get first element in queue, tells us node being visited */
-    Ns = /* -----------  COMPLETE --------------- */
-    if (Ns == ((NodeS*) NULL))
+    Ns = getfirstQueue(BFSqueue);
+    if (Ns == ((int*) NULL))
       break;
+    fprintf(stdout, "%d ", *Ns);
     /* process that node's adjacency list */
-    lp = /* -----------  COMPLETE --------------- */
+    lp = listv[*Ns];
     while (lp != NULL) {
       /* for every element in the adjacency list */
       /* check if it has been queued; if not, put it in the queue */
       /* and print it to stdout */
 
-      /* -----------  COMPLETE --------------- */
+      pint = getItemLinkedList(lp);
+      if(!inqueue[pint->n2]){
+        insertQueue(BFSqueue, (Item) &(pint->n2));
+        numInqueue++;
+        inqueue[pint->n2]++;
+      }
 
       lp = getNextNodeLinkedList(lp);
     }
-  }
-  fprintf(stdout, "\n");
 
+  }
+  Ns = getfirstQueue(BFSqueue);
+  while (Ns != ((int*) NULL)){
+    fprintf(stdout, "%d ", *Ns);
+    Ns = getfirstQueue(BFSqueue);
+  }
+  
+  fprintf(stdout, "\n");
+  freeQueue(BFSqueue, NULL);
+  free(inqueue);
   return;
 }
 
@@ -158,7 +169,6 @@ int main(int argc, char *argv[])
   char    extOut[] = ".ladj";
   char    *nomeFicheiroIn, *nomeFicheiroOut;
   twint   *pint1, *pint2;
-
   LinkedList **listv, *lp;
   FILE    *fpIn,*fpOut;
 
@@ -199,7 +209,7 @@ int main(int argc, char *argv[])
   }
 
   /* create vector for adjacency lists, one per node */
-  listv = (LinkedList**) malloc(nv * sizeof (LinkedList*));
+  listv = (LinkedList**) calloc(nv , sizeof (LinkedList*));
   if (listv == ((LinkedList**) NULL))
     memoryError("memory allocation for adjacency lists vector in main");
 
@@ -233,16 +243,26 @@ int main(int argc, char *argv[])
     }
 
     /*********** INSERT EDGE STRUCTURES IN EACH APPROPRIATE LIST ***********/
-    listv[n1] = /* -----------  COMPLETE --------------- */
-    listv[n2] = /* -----------  COMPLETE --------------- */
 
+    listv[n1] = insertUnsortedLinkedList(listv[n1], pint1);
+    listv[n2] = insertUnsortedLinkedList(listv[n2], pint2);
   }
 
 
-  /* Compute de degree of every nome and the average edge density */
-
-  /* -----------  COMPLETE --------------- */
-
+  /* Compute de degree of every node and the average edge density */
+  ne = 0;
+  for (i = 0; i < nv; i++){
+    lp = listv[i];
+    k=0;
+    while(lp!= NULL){
+      ++k;
+      lp=getNextNodeLinkedList(lp);
+    }
+    printf("%d tem degree %d \n", i, k);
+    ne +=k;
+  }
+  printf("%f is avg\n", (float) ne/nv);
+  ne /= 2;
 
   /* open output file */
   fpOut = fopen (nomeFicheiroOut, "w");
@@ -259,7 +279,7 @@ int main(int argc, char *argv[])
       pint1 = (twint *) getItemLinkedList(lp);
       lp = getNextNodeLinkedList(lp);
       /* print the node and the respective weight */
-      /* -----------  COMPLETE --------------- */
+      fprintf(fpOut,"%d:%d ", pint1->n2, pint1->wt);
     }
     fprintf(fpOut, " -1\n");
   }
@@ -281,8 +301,11 @@ int main(int argc, char *argv[])
 
   /************ add code to do a BFS in graph from node en to node sn *********/
   doBFS(listv, sn, nv);
-
-  /* -- free any memory you have allocated -- */
+  for(i =  0; i < nv; i++)
+    freeLinkedList(listv[i], free);
+  free(listv);
+  free(nomeFicheiroOut);
+  
 
   exit(0);
 }
