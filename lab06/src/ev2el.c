@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
     exit(2);
   }
   k = fscanf(fpIn, "%d", &ne);
-  if(k < 1) {
+  if(k < 1) { 
     printf("ERROR cannot read E number from input file %s\n",
            nomeFicheiroIn);
     exit(2);
