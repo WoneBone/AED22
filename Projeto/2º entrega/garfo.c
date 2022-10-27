@@ -107,7 +107,7 @@ void facagarfo(garfo* g){
 int test(Item w1[], Item w2[]){
     int i=0, count=0;
     for (i=0;i<=strlen(w1[]);i++){
-        if(w1[i]==w2[i]){
+        if(w1[][i]==w2[][i]){
             count++;
         }
     }
