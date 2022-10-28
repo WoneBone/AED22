@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "LinkedList.h"
+#include "defs.h"
 
 
 typedef struct graf{

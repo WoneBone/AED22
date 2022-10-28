@@ -221,7 +221,7 @@ int main ( int argc, char **argv )
   dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
-
+  garfo *faca;
   if (st_palavras == NULL){
     exit(-1);
   }
@@ -244,7 +244,7 @@ int main ( int argc, char **argv )
       fprintf(out, "%s %s %d \n \n", word1, word2, modo);
       continue;
     }
-    if (modo == 1){
+    /* if (modo == 1){
       sub_1(word1, st_palavras, out);
       fprintf(out,"\n");
     }
@@ -255,8 +255,14 @@ int main ( int argc, char **argv )
       fprintf(out, "\n");
       
       continue;
+    } */
+    else{
+      faca = garfointit(st_palavras->tamanho[strlen(word1-1)]);
+      putingarfo(faca, (Item) st_palavras->palavras[strlen(word1-1)],modo, test);
+      facagarfo(faca);
     }
   }
+  
   FreeTabelaPalavras(st_palavras);
   free(st_palavras);
   free(word1);
@@ -267,3 +273,26 @@ int main ( int argc, char **argv )
   return (0);
 }
 
+/*************************************************************
+*   test()
+*   
+*   Argumentos: item , item 
+*
+*   Returns: int
+*
+*   Side effects: none
+*
+*   Descrição: testa quantas letras sao diferentes em duas palavras
+* 
+*
+**************************************************************/
+int test(Item w1, Item w2){
+    int i=0, count=0;
+    for (i=0;i<=strlen((char*) w1);i++){
+        if(((char*) w1)[i]==((char*)w2)[i]){
+            count++;
+        }
+    }
+    count*= count;
+    return count;
+}

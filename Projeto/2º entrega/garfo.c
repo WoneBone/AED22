@@ -91,26 +91,3 @@ void facagarfo(garfo* g){
     free(g);
 }
 
-/*************************************************************
-*   test()
-*   
-*   Argumentos: item , item 
-*
-*   Returns: int
-*
-*   Side effects: none
-*
-*   Descrição: testa quantas letras sao diferentes em duas palavras
-* 
-*
-**************************************************************/
-int test(Item w1, Item w2){
-    int i=0, count=0;
-    for (i=0;i<=strlen((char*) w1);i++){
-        if(((char*) w1)[i]==((char*)w2)[i]){
-            count++;
-        }
-    }
-    count*= count;
-    return count;
-}
