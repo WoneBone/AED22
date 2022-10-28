@@ -59,8 +59,8 @@ void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item)){
                 n1 -> n2 = j; n1->wt = wt;
                 n2 -> n2 = i; n2->wt = wt;
 
-                insertUnsortedLinkedList(g->graf[i],n1);
-                insertUnsortedLinkedList(g->graf[j], n2);
+                g->graf[i] =insertUnsortedLinkedList(g->graf[i],n1);
+                g->graf[j] = insertUnsortedLinkedList(g->graf[j], n2);
                 g->ne++;
             }
         }
@@ -89,5 +89,32 @@ void facagarfo(garfo* g){
     }
     free(g->graf);
     free(g);
+}
+/*************************************************************
+*   garfada()
+*   
+*   Argumentos: g - garfo imprimir
+*
+*   Returns:
+*
+*   Side effects: none
+*
+*   Descrição: imprime o grafo para o stdout. Deve ser usada apenas como debug
+* 
+*
+**************************************************************/
+void garfada (garfo *g){
+    int i;
+    LinkedList *lp;
+    node *n;
+    for(i = 0; i < g->nv; i++) {
+        lp = g->graf[i];
+        while (lp != NULL) {
+            n = (node *) getItemLinkedList(lp);
+            lp = getNextNodeLinkedList(lp);
+            printf("%d:%d  ", n->n2, n->wt);
+        }
+        fprintf(stdout, " -1\n");
+    }
 }
 

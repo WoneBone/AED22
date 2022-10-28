@@ -190,8 +190,8 @@ void sort (dic *pp, int size){
  *
  *****************************************************************************/
 int checkpp(char *word1, char *word2, int modo, dic *pp){
-  
-  if (modo != 1 && modo != 2) return -1;
+  int i = strlen(word1) * strlen(word2);
+  if (modo > i) return -1;
 
   else if (strlen(word1) > pp->bigboi) return -1;
   
@@ -203,6 +203,29 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
   return 0;
 }
 
+/*************************************************************
+*   test()
+*   
+*   Argumentos: item , item 
+*
+*   Returns: int
+*
+*   Side effects: none
+*
+*   Descrição: testa quantas letras sao diferentes em duas palavras
+* 
+*
+**************************************************************/
+int test(Item w1, Item w2){
+    int i=0, count=0;
+    for (i=0;i<=strlen((char*) w1);i++){
+        if(((char*) w1)[i]!=((char*)w2)[i]){
+            count++;
+        }
+    }
+    count*= count;
+    return count;
+}
 /******************************************************************************
  * main()
  *
@@ -257,8 +280,12 @@ int main ( int argc, char **argv )
       continue;
     } */
     else{
-      faca = garfointit(st_palavras->tamanho[strlen(word1-1)]);
-      putingarfo(faca, (Item) st_palavras->palavras[strlen(word1-1)],modo, test);
+      faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
+      putingarfo(faca, (Item) st_palavras->palavras[strlen(word1)-1],modo, test);
+      garfada(faca);
+      for (int i = 0; i < st_palavras->tamanho[strlen(word1) - 1]; i++){
+        printf("%d - %s \n", i ,st_palavras->palavras[strlen(word1) -1][i]);
+      }
       facagarfo(faca);
     }
   }
@@ -273,26 +300,3 @@ int main ( int argc, char **argv )
   return (0);
 }
 
-/*************************************************************
-*   test()
-*   
-*   Argumentos: item , item 
-*
-*   Returns: int
-*
-*   Side effects: none
-*
-*   Descrição: testa quantas letras sao diferentes em duas palavras
-* 
-*
-**************************************************************/
-int test(Item w1, Item w2){
-    int i=0, count=0;
-    for (i=0;i<=strlen((char*) w1);i++){
-        if(((char*) w1)[i]==((char*)w2)[i]){
-            count++;
-        }
-    }
-    count*= count;
-    return count;
-}

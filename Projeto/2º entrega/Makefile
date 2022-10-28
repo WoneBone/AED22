@@ -16,7 +16,7 @@ CFLAGS=-g -Wall -std=c99
 
 
 Wordmutations: main.o LinkedList.o dichandl.o garfo.o
-	$(CC) $(CFLAGS) -o wrdmttns main.o dichandl.o
+	$(CC) $(CFLAGS) -o wrdmttns main.o dichandl.o LinkedList.o garfo.o
 
 main.o: main.c dichandl.h garfo.h LinkedList.h defs.h
 	$(CC) -c $(CFLAGS) main.c
