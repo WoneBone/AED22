@@ -282,10 +282,6 @@ int main ( int argc, char **argv )
     else{
       faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
       putingarfo(faca, (Item) st_palavras->palavras[strlen(word1)-1],modo, test);
-      garfada(faca);
-      for (int i = 0; i < st_palavras->tamanho[strlen(word1) - 1]; i++){
-        printf("%d - %s \n", i ,st_palavras->palavras[strlen(word1) -1][i]);
-      }
       facagarfo(faca);
     }
   }

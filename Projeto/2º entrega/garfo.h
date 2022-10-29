@@ -19,18 +19,24 @@ typedef struct node {
 typedef struct head{
 
     Item **heads;
+    int e;
     int wt;
-    int nv
-
+    int nv;
+    int (*prio)(Item *);
+    int *pr;
 } head;
 
+/* funções de grafos */
 garfo* garfointit( int nv);
 void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item));
 void facagarfo(garfo* g);
 int test(Item w1,Item w2);
-Item headinit(int nv);
-void puthead(head* a,head *b);
-void fixheadup(head*a);
-void fixheadown(head*a);
-Item* gethead(head*a, int max_wt);
+
+/* funções de acervos */
+head *headinit(int nv, int max_wt, int prio(Item *));
+void puthead(head* a,Item *b);
+void fixheadup(head*a, int p);
+void fixheadown(head*a, int pos);
+Item* gethead(head*a);
+void pullout(head *a, void freeI(Item ));
 

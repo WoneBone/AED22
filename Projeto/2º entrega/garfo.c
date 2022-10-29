@@ -117,4 +117,109 @@ void garfada (garfo *g){
         fprintf(stdout, " -1\n");
     }
 }
+/*************************************************************
+*   headinit()
+*   
+*   Argumentos: nv - númeto total de vértice
+*               max_wt - prioridade a partir da qual se considera que não há ligação
+*
+*   Returns: pointer to acervo
+*
+*   Side effects: none
+*
+*   Descrição: allocação de acervo
+* 
+*
+**************************************************************/
+head *headinit(int nv, int max_wt, int prio(Item *)){
+    head *h = (head *) malloc(sizeof(head));
+    int i = 0;
+    if( h == NULL)
+        exit(-1);
 
+    h->heads = (Item **) calloc(nv,sizeof(Item *));
+    h -> pr = (int *) malloc(nv * sizeof(int));
+    if( h->heads == NULL && h->pr == NULL)
+        exit(-1);
+    for (; i < nv; i++)
+        h->pr[i] = max_wt + 1;
+    
+    h->nv = nv;
+    h->wt = max_wt;
+    h->e = 0;
+    h->prio = prio;
+    return h;
+}
+
+void puthead(head* a,Item *b){
+    a->heads[a->e] = b;
+    a->pr[a->e] = a->prio(b);
+    
+    fixheadup(a, a->e);
+
+    a->e++;
+
+}
+
+void fixheadup(head* a, int pos){
+    Item *tmp;
+    int t;
+    while(pos > 0 && (a->pr[(pos -1)/2] > a->pr[pos])){
+        tmp = a->heads[pos];
+        a->heads[pos] = a->heads[(pos-1)/2];
+        a->heads[(pos-1)/2] = tmp;
+
+        t = a->pr[pos];
+        a->pr[pos] = a->pr[(pos-1)/2];
+        a->pr[(pos-1)/2] = t;
+
+        pos = (pos - 1)/2;
+    }
+}
+
+Item *gethead(head * a){
+    Item *ret = a->heads[0];
+    a->pr[0] = a->wt +1;
+    fixheadown(a, 0);
+    a->e--;
+    return ret;
+}
+
+void fixheadown(head *a, int pos){
+    Item *tmp;
+    int child, t;
+    while (2*pos < a-> nv -1){
+        child = (2*pos) + 1;
+        if (child < a->nv - 1){
+            if (a->pr[child] >a->pr[child+1])
+                child++;
+        }
+        if (a->pr[pos] < a->pr[child]) break;
+
+        else{
+            tmp = a->heads[pos];
+            a->heads[pos] = a->heads[child];
+            a->heads[child] = tmp;
+
+            t = a->pr[pos];
+            a->pr[pos] = a->pr[child];
+            a->pr[child] = t;
+
+            pos = child;
+        }
+    }
+
+}
+
+void pullout(head *a, void freeI(Item )){
+    int i = 0;
+
+    for(; i< a->e; a++)
+        freeI(a->heads[i]);
+
+    free(a->heads);
+    free(a->pr);
+    free(a);
+    
+
+}
