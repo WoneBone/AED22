@@ -117,6 +117,44 @@ void garfada (garfo *g){
         fprintf(stdout, " -1\n");
     }
 }
+
+void djigja(garfo *g, int s, int inhead[], int max_wt, int prio(Item *)){
+    int v, w;
+    head *a;
+    node *t, *i1, *12;
+    LinkedList *n,
+
+    a = headinit(g->nv, max_wt, prio);
+
+    for (v = 0; v < f->nv; v++){
+        inhead[v] = -1;
+    }
+    
+    t = (node *) malloc(sizeof(node));
+    t->n2 = s;
+    t->wt = 0;
+    puthead(a, t);
+
+    do{
+        t = gethead(a);
+        n = g->graf[t->n2];
+        while(n != NULL){
+            i1 = getItemLinkedList(n);
+            if (inhead[i1->n2] == -1){
+                i2 = (node *) malloc(sizeof(node));
+                i2->n2 = i1->n2;
+                i2 ->wt = i1->wt + t->wt;
+                inhead[i2->n2] = t -> n2;
+                puthead(a, i2); 
+            }
+            else if ((w = i1->wt + t->wt) < getprio(a, i1->n2)){}
+                chgprio(a, i1->n2, w);
+                inhead[i2->n2] = t -> n2;    
+            }
+        }
+    }while(!headempty(a))
+
+}
 /*************************************************************
 *   headinit()
 *   
@@ -139,10 +177,13 @@ head *headinit(int nv, int max_wt, int prio(Item *)){
 
     h->heads = (Item **) calloc(nv,sizeof(Item *));
     h -> pr = (int *) malloc(nv * sizeof(int));
-    if( h->heads == NULL && h->pr == NULL)
+    h -> pos = (int *) malloc(nv * sizeof(int));
+
+    if( (int) h->heads && (int) h->pr && (int) h->pos)
         exit(-1);
     for (; i < nv; i++)
         h->pr[i] = max_wt + 1;
+        h->pos[i] = -1;
     
     h->nv = nv;
     h->wt = max_wt;
@@ -152,13 +193,19 @@ head *headinit(int nv, int max_wt, int prio(Item *)){
 }
 
 void puthead(head* a,Item *b){
+    if (a->prio(b) > a->wt){        /* Este if serve para garantir que uma má utilização do código não leva a um crash por double free.*/
+        free(b);                    /* Tem o efeito secundário de se b não for libertado por apenas um free os restantes blocos são perdidos*/
+        return;                     /*  No entanto como se trata de um edge case por uma má implementação por parte do cliente that's a price we are willing to pay*/
+        
+    }
     a->heads[a->e] = b;
     a->pr[a->e] = a->prio(b);
+    a->pos[b] = a->e;
     
     fixheadup(a, a->e);
 
     a->e++;
-
+    return;
 }
 
 void fixheadup(head* a, int pos){
@@ -173,6 +220,9 @@ void fixheadup(head* a, int pos){
         a->pr[pos] = a->pr[(pos-1)/2];
         a->pr[(pos-1)/2] = t;
 
+        a->pos[(a->heads[pos])->n2] = pos;
+        a->pos[(a->heads[(pos - 1)/2])->n2] = (pos - 1)/ 2;
+
         pos = (pos - 1)/2;
     }
 }
@@ -180,6 +230,7 @@ void fixheadup(head* a, int pos){
 Item *gethead(head * a){
     Item *ret = a->heads[0];
     a->pr[0] = a->wt +1;
+    a->pos[(a->heads[0])->n2] = -1;
     fixheadown(a, 0);
     a->e--;
     return ret;
@@ -205,6 +256,9 @@ void fixheadown(head *a, int pos){
             a->pr[pos] = a->pr[child];
             a->pr[child] = t;
 
+            a->pos[(a->heads[pos])->n2] = pos;
+            a->pos[(a->heads[child])->n2] = child;
+
             pos = child;
         }
     }
@@ -219,6 +273,7 @@ void pullout(head *a, void freeI(Item )){
 
     free(a->heads);
     free(a->pr);
+    free(a->pos);
     free(a);
     
 
