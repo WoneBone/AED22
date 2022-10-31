@@ -132,9 +132,7 @@ void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
     if (t == NULL)
         exit(-1);
     inhead[o] = o;
-    t->n2 = o;
-    t->wt = 0;
-    puthead(a, t->n2, t->wt);
+    puthead(a, o, 0);
 
     while(headnotempty(a) == 1){
         t->wt = smolprius(a);
@@ -149,7 +147,7 @@ void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
                 puthead(a, i->n2, i->wt + t->wt);
                 inhead[i->n2] = t -> n2;
             }
-            else if ((w = i->wt + t->wt) < getprius(a, i->n2) && getprius(a, i->n2) < max_wt + 1){
+            else if ( getpos(a, i->n2) != -1 && (w = i->wt + t->wt) < getprius(a, i->n2)){
                 chgprius(a, i->n2, w);
                 inhead[i->n2] = t -> n2;
             }
@@ -157,7 +155,7 @@ void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
         }
     }
     free(t);
-   // pullout(a);
+    pullout(a);
 
 }
 /*************************************************************
@@ -187,7 +185,7 @@ head *headinit(int nv, int max_wt){
     if( !((long int) h->heads && (long int) h->pr && (long int) h->pos))
         exit(-1);
     for (; i < nv; i++){
-        h->pr[i] = max_wt + 1;
+        h->pr[i] = max_wt;
         h->pos[i] = -1;
         h -> heads[i] = -1;
     }
@@ -198,7 +196,9 @@ head *headinit(int nv, int max_wt){
     return h;
 }
 
-void puthead(head* a, int b, int pr){  
+void puthead(head* a, int b, int pr){
+    if (pr > a->wt)       
+        return;   
 
     a->heads[a->e] = b;
     a->pr[a->e] = pr;
@@ -230,11 +230,22 @@ void fixheadup(head* a, int pos){
 }
 
 int gethead(head * a){
-    int ret = a->heads[0];
-    a->pr[0] = a->wt +1;
+    int ret = a->heads[0], t;
+    a->heads[0] = -1;
+    a->pr[0] = a->wt;
     a->pos[ret] = -1;
-    fixheadown(a, 0);
-    a->e--;
+
+    a->heads[0] = a->heads[--a->e];
+    a->heads[a->e] = -1;
+
+    t = a->pr[0];
+    a->pr[0] = a->pr[a->e];
+    a->pr[a->e] = t;
+    if(headnotempty(a)){
+        a->pos[a->heads[0]] = 0;
+        fixheadown(a, 0);
+    }
+    a->pos[ret] = -1;
     return ret;
 }
 
@@ -271,7 +282,7 @@ void pullout(head *a){
 
     free(a->heads);
     free(a->pr);
-    /*free(a->pos);*/
+    free(a->pos);
     free(a);
     
 
@@ -300,6 +311,10 @@ void chgprius(head *a, int v, int pr){
     return;
 
 } 
+
+int getpos(head *a, int v){
+    return a->pos[v];
+}
 
 int smolprius(head *a){
     return a->pr[0];

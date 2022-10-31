@@ -30,7 +30,6 @@ typedef struct head{
 garfo* garfointit( int nv);
 void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item));
 void facagarfo(garfo* g);
-int test(Item w1,Item w2);
 void garfada (garfo *g);
 void djigja(garfo *g, int o, int d, int st[], int max_wt);
 
@@ -45,4 +44,5 @@ void pullout(head *a);
 int headnotempty(head *a);
 int getprius(head *a, int v);
 void chgprius(head *a, int v, int pr);
+int getpos(head* a, int v);
 

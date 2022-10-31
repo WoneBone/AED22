@@ -39,4 +39,5 @@ int main(int argc, char* argv[]){
 
     facagarfo(a);
     fclose(f);
+    free(st);
 }

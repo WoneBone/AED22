@@ -241,6 +241,7 @@ int test(Item w1, Item w2){
 int main ( int argc, char **argv )
 {
   int modo = 0;
+  int o, a,*tw;
   dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
@@ -267,6 +268,20 @@ int main ( int argc, char **argv )
       fprintf(out, "%s %s %d \n \n", word1, word2, modo);
       continue;
     }
+    faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
+    putingarfo(faca,*st_palavras->palavras[strlen(word1)-1],modo,test);
+    o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]);
+    a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]);
+    tw = (int *) malloc(sizeof(int)*(faca->nv));
+    if(tw==NULL){
+      exit(-1);
+    }
+    djigja(faca, a, o, tw, 1000000000);
+
+    for (int j = o; j != tw[j] && tw[j] !=-1; j = tw[j]){
+      printf("%s\n", st_palavras->palavras[strlen(word1) -1][j]);
+    }
+
     /* if (modo == 1){
       sub_1(word1, st_palavras, out);
       fprintf(out,"\n");
@@ -279,11 +294,11 @@ int main ( int argc, char **argv )
       
       continue;
     } */
-    else{
-      faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
-      putingarfo(faca, (Item) st_palavras->palavras[strlen(word1)-1],modo, test);
-      facagarfo(faca);
-    }
+    
+    faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
+    putingarfo(faca, (Item) st_palavras->palavras[strlen(word1)-1],modo, test);
+    facagarfo(faca);
+  
   }
   
   FreeTabelaPalavras(st_palavras);
