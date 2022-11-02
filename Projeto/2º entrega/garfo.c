@@ -347,9 +347,13 @@ garfo * colhergarfo(garfo* g, int nmax_wt){
             curr = (node *) getItemLinkedList(del);
             if(curr->wt > nmax_wt){
                 revoveFromList(aux, del, free);
+                del = getNextNodeLinkedList(aux);
             }
-            aux = del;
-            del = getNextNodeLinkedList(del);
+            else{
+                aux = del;
+                del = getNextNodeLinkedList(aux);
+            }
+            
         }
     }
     

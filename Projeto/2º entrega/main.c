@@ -267,7 +267,7 @@ int main ( int argc, char **argv )
     fr = 1;
     sort(st_palavras, strlen(word1));
     if (checkpp(word1, word2, modo, st_palavras) == -1){
-      fprintf(out, "%s %s %d \n \n", word1, word2, modo);
+      fprintf(out, "%s %d\n %s \n\n", word1, -1, word2);
       continue;
     }
     if(modo2==0 || size==0){
