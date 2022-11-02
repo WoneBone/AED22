@@ -14,14 +14,21 @@
 CC=gcc
 CFLAGS=-O3 -Wall -std=c99 
 
-Wordmutations: main.o dichandl.o
-	$(CC) $(CFLAGS) -o wrdmttns main.o dichandl.o
 
-main.o: main.c dichandl.h 
+Wordmutations: main.o LinkedList.o dichandl.o garfo.o
+	$(CC) $(CFLAGS) -o wrdmttns main.o dichandl.o LinkedList.o garfo.o
+
+main.o: main.c dichandl.h garfo.h LinkedList.h defs.h
 	$(CC) -c $(CFLAGS) main.c
+
+LinkedList.o: LinkedList.c LinkedList.h defs.h
+	$(CC) -c $(CFLAGS) LinkedList.c
 
 dichandl.o: dichandl.c dichandl.h
 	$(CC) -c $(CFLAGS) dichandl.c
+
+garfo.o: garfo.c garfo.h LinkedList.h defs.h
+	$(CC) -c $(CFLAGS) garfo.c
 
 clean::
 	rm -f *.o core a.out Wordmutations *~

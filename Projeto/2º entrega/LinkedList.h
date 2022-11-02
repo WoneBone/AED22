@@ -203,6 +203,36 @@ LinkedList * insertSortedLinkedList(LinkedList * first,
                            (Item item1, Item item2),
                            int * err);
 
+/*
+ *  Function:
+ *    revoveFromList
+ *
+ *  Description:
+ *    Removes an item from a linked list.
+ *
+ *  Arguments:
+ *    Pointer to the first node of a sorted linked list:
+ *        (LinkedList *) first
+ *    Pointer to item to be inserted:
+ *        Item item
+ *    Pointer to function to compare two items:
+ *        int comparisonItemFnt(void * item1, void * item2)
+ *
+ *      This function must return a value less, equal, or greater
+ *      than zero if item1 compares less, equal, or greater than
+ *      item2, respectively.
+ *
+ *    Pointer to integer to write error return value:
+ *        (int *) err
+ *
+ *        0 upon sucess, 1 in case the item is NULL, and 2 in
+ *      case of memory allocation failure.
+ *
+ *  Return value:
+ *    Returns the pointer to the first node of the sorted linked list.
+ */
+void revoveFromList(LinkedList *befor, LinkedList *del,  void (* freeItemFnt)(Item));
+
 
 /* End of: Protect multiple inclusions                              */
 #endif

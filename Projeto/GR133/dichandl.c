@@ -14,6 +14,9 @@
 char *LePalavra ( FILE * f )
 {
   static char palavra[MAX_STR];
+  /* It is assumed that the words present in the text files do not exceed
+     100 characters in length  */
+  /* Note that the variable palavra is declared as "static". */
   if ( fscanf ( f, "%s", palavra ) ==1 )
     return (palavra);
   else

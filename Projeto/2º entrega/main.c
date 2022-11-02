@@ -33,7 +33,7 @@ FILE *OutputFile(const char *nome, const char *term){
   char *file, *aux;
   FILE *out = NULL;
 
-  file = (char *) malloc(sizeof(char) * (strlen(nome) + strlen(".stats") + 1));
+  file = (char *) malloc(sizeof(char) * (strlen(nome) + strlen(".paths") + 1));
   if (file == NULL){
     exit(-1);
   }
@@ -47,7 +47,7 @@ FILE *OutputFile(const char *nome, const char *term){
     exit(-420);
   }
 
-  strcpy(aux, ".stats");
+  strcpy(aux, ".paths");
 
   out = AbreFicheiro(file, "w");
   free(file);
@@ -190,8 +190,8 @@ void sort (dic *pp, int size){
  *
  *****************************************************************************/
 int checkpp(char *word1, char *word2, int modo, dic *pp){
-  int i = strlen(word1) * strlen(word2);
-  if (modo > i) return -1;
+  
+  if (modo <=0) return -1;
 
   else if (strlen(word1) > pp->bigboi) return -1;
   
@@ -200,6 +200,7 @@ int checkpp(char *word1, char *word2, int modo, dic *pp){
   else if(pp->tamanho[strlen(word1)-1] <= 0) return -1;
 
   else if ((bis(word1, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL) || (bis(word2, pp->palavras[strlen(word1) -1], pp->tamanho[strlen(word1) -1]) == NULL)) return -1;
+
   return 0;
 }
 
@@ -240,12 +241,12 @@ int test(Item w1, Item w2){
 
 int main ( int argc, char **argv )
 {
-  int modo = 0;
-  int o, a,*tw;
+  int modo = 0,modo2=0,size=0, fr = 0;
+  int o = 0, a = 0,*tw = NULL, *wt = NULL, j = 0;
   dic *st_palavras = (dic *) malloc(sizeof(dic));
   FILE *p = NULL, *d = NULL, *out = NULL;
   char *word1, *word2;
-  garfo *faca;
+  garfo *faca = NULL;
   if (st_palavras == NULL){
     exit(-1);
   }
@@ -263,25 +264,55 @@ int main ( int argc, char **argv )
   word2 = (char *) malloc(sizeof(char) * (MAX_STR+ 1));
   PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo) == 3){
+    fr = 1;
     sort(st_palavras, strlen(word1));
     if (checkpp(word1, word2, modo, st_palavras) == -1){
       fprintf(out, "%s %s %d \n \n", word1, word2, modo);
       continue;
     }
-    faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
-    putingarfo(faca,*st_palavras->palavras[strlen(word1)-1],modo,test);
-    o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]);
-    a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]);
-    tw = (int *) malloc(sizeof(int)*(faca->nv));
-    if(tw==NULL){
-      exit(-1);
-    }
-    djigja(faca, a, o, tw, 1000000000);
+    if(modo2==0 || size==0){
+      faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
+      putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
+      o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+      a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+      tw = (int *) malloc(sizeof(int)*(faca->nv));
+      wt = (int *) malloc(sizeof(int)*(faca->nv));
 
-    for (int j = o; j != tw[j] && tw[j] !=-1; j = tw[j]){
-      printf("%s\n", st_palavras->palavras[strlen(word1) -1][j]);
-    }
+      if(tw==NULL || wt==NULL){
+        exit(-1);
+      }
+      modo2=modo;
+      size=strlen(word1);
 
+    }
+    else if(modo>modo2 || strlen(word1)!=size){
+      facagarfo(faca);
+      free(tw);
+      free(wt);
+      faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
+      putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
+      o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+      a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+      tw = (int *) malloc(sizeof(int)*(faca->nv));
+      wt = (int *) malloc(sizeof(int)*(faca->nv));
+
+      if(tw==NULL || wt==NULL){
+        exit(-1);
+      }
+      modo2=modo;
+      size=strlen(word1);
+    }else if(modo<modo2){
+      faca=colhergarfo(faca,(modo*modo));
+    }
+    djigja(faca, a, o, tw, wt, 1000000000);
+    fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], wt[o]);
+    if(tw[o]!=-1){
+      for (j = tw[o]; j != tw[j] && tw[j] !=-1; j = tw[j]){
+        fprintf(out,"%s\n", st_palavras->palavras[strlen(word1) -1][j]);
+      }
+    }
+    fprintf(out, "%s\n\n", st_palavras->palavras[strlen(word1) -1][tw[j]]);
+    
     /* if (modo == 1){
       sub_1(word1, st_palavras, out);
       fprintf(out,"\n");
@@ -295,12 +326,12 @@ int main ( int argc, char **argv )
       continue;
     } */
     
-    faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
-    putingarfo(faca, (Item) st_palavras->palavras[strlen(word1)-1],modo, test);
-    facagarfo(faca);
-  
   }
-  
+  if(fr == 1){
+    free(tw);
+    free(wt);
+    facagarfo(faca);
+  }
   FreeTabelaPalavras(st_palavras);
   free(st_palavras);
   free(word1);
@@ -308,6 +339,7 @@ int main ( int argc, char **argv )
   fclose(d);
   fclose(p);
   fclose(out);
+  
   return (0);
 }
 

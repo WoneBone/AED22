@@ -118,7 +118,7 @@ void garfada (garfo *g){
     }
 }
 
-void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
+void djigja(garfo *g, int o, int d, int inhead[], int wt[], int max_wt){
     int v, w;
     head *a= headinit(g->nv, max_wt);
     node *t, *i;
@@ -126,6 +126,7 @@ void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
 
     for (v = 0; v < a->nv; v++){
         inhead[v] = -1;
+        wt[v] = max_wt;
     }
     
     t = (node *) malloc(sizeof(node));
@@ -137,6 +138,7 @@ void djigja(garfo *g, int o, int d, int inhead[], int max_wt){
     while(headnotempty(a) == 1){
         t->wt = smolprius(a);
         t->n2 = gethead(a);
+        wt[t->n2] = t->wt;
 
         if (t->n2 == d)
             break;
@@ -318,4 +320,39 @@ int getpos(head *a, int v){
 
 int smolprius(head *a){
     return a->pr[0];
+}
+
+garfo * colhergarfo(garfo* g, int nmax_wt){
+    LinkedList *del, *aux;
+    node *curr;
+
+    for (int i = 0; i< g->nv; i++){
+        aux = g->graf[i];
+        if(aux == NULL)
+            continue;
+
+        del = getNextNodeLinkedList(aux);
+        curr = (node *) getItemLinkedList(aux);
+        while(curr->wt > nmax_wt){ //caso de ter que remover cabeça
+            free(curr);
+            free(aux);
+            g->graf[i] = del;
+            aux = g->graf[i];
+            if(aux == NULL)
+                break;
+            del = getNextNodeLinkedList(aux);
+            curr = (node *) getItemLinkedList(aux);
+        }
+        while (del != NULL){
+            curr = (node *) getItemLinkedList(del);
+            if(curr->wt > nmax_wt){
+                revoveFromList(aux, del, free);
+            }
+            aux = del;
+            del = getNextNodeLinkedList(del);
+        }
+    }
+    
+
+    return g;
 }
