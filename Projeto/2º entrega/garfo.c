@@ -59,7 +59,7 @@ void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item)){
                 n1 -> n2 = j; n1->wt = wt;
                 n2 -> n2 = i; n2->wt = wt;
 
-                g->graf[i] =insertUnsortedLinkedList(g->graf[i],n1);
+                g->graf[i] = insertUnsortedLinkedList(g->graf[i],n1);
                 g->graf[j] = insertUnsortedLinkedList(g->graf[j], n2);
                 g->ne++;
             }
@@ -116,6 +116,43 @@ void garfada (garfo *g){
         }
         fprintf(stdout, " -1\n");
     }
+}
+garfo * colhergarfo(garfo* g, int nmax_wt){
+    LinkedList *del, *aux;
+    node *curr;
+
+    for (int i = 0; i< g->nv; i++){
+        aux = g->graf[i];
+        if(aux == NULL)
+            continue;
+
+        del = getNextNodeLinkedList(aux);
+        curr = (node *) getItemLinkedList(aux);
+        while(curr->wt > nmax_wt){ //caso de ter que remover cabeça
+            free(curr);
+            free(aux);
+            g->graf[i] = del;
+            aux = g->graf[i];
+            if(aux == NULL)
+                break;
+            del = getNextNodeLinkedList(aux);
+            curr = (node *) getItemLinkedList(aux);
+        }
+        while (del != NULL){
+            curr = (node *) getItemLinkedList(del);
+            if(curr->wt > nmax_wt){
+                revoveFromList(aux, del, free);
+                del = getNextNodeLinkedList(aux);
+            }
+            else{
+                aux = del;
+                del = getNextNodeLinkedList(aux);
+            }
+            
+        }
+    }
+    
+    return g;
 }
 
 void djigja(garfo *g, int o, int d, int inhead[], int wt[], int max_wt){
@@ -322,41 +359,3 @@ int smolprius(head *a){
     return a->pr[0];
 }
 
-garfo * colhergarfo(garfo* g, int nmax_wt){
-    LinkedList *del, *aux;
-    node *curr;
-
-    for (int i = 0; i< g->nv; i++){
-        aux = g->graf[i];
-        if(aux == NULL)
-            continue;
-
-        del = getNextNodeLinkedList(aux);
-        curr = (node *) getItemLinkedList(aux);
-        while(curr->wt > nmax_wt){ //caso de ter que remover cabeça
-            free(curr);
-            free(aux);
-            g->graf[i] = del;
-            aux = g->graf[i];
-            if(aux == NULL)
-                break;
-            del = getNextNodeLinkedList(aux);
-            curr = (node *) getItemLinkedList(aux);
-        }
-        while (del != NULL){
-            curr = (node *) getItemLinkedList(del);
-            if(curr->wt > nmax_wt){
-                revoveFromList(aux, del, free);
-                del = getNextNodeLinkedList(aux);
-            }
-            else{
-                aux = del;
-                del = getNextNodeLinkedList(aux);
-            }
-            
-        }
-    }
-    
-
-    return g;
-}

@@ -31,6 +31,7 @@ garfo* garfointit( int nv);
 void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item));
 void facagarfo(garfo* g);
 void garfada (garfo *g);
+garfo * colhergarfo(garfo* g, int nmax_wt);
 void djigja(garfo *g, int o, int d, int st[], int wt[], int max_wt);
 
 /* funções de acervos */
@@ -45,4 +46,3 @@ int headnotempty(head *a);
 int getprius(head *a, int v);
 void chgprius(head *a, int v, int pr);
 int getpos(head* a, int v);
-garfo * colhergarfo(garfo* g, int nmax_wt);

@@ -265,17 +265,17 @@ int main ( int argc, char **argv )
   PreencheTabelaPalavras ( d, st_palavras );
   while(fscanf(p,"%s %s %d", word1, word2, &modo) == 3){
     sort(st_palavras, strlen(word1));
-    if (checkpp(word1, word2, modo, st_palavras) == -1){
+    if (checkpp(word1, word2, modo, st_palavras) == -1){  /* verificação de validade de problema */
       fprintf(out, "%s %d\n%s \n\n", word1, -1, word2);
       continue;
     }
 
-    if ((j = test((Item) word1, (Item ) word2)) <= 1){
+    if ((j = test((Item) word1, (Item ) word2)) <= 1){    /* Caso de palavras iguais ou a apenas uma permutação de distância */
       fprintf(out, "%s %d\n%s \n\n", word1, j, word2);
       continue;
     }
     fr = 1;
-    if(modo2==0 || size==0){
+    if(modo2==0 || size==0){  /* Caso seja o primeiro problema*/
       faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
       putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
       o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
@@ -290,7 +290,7 @@ int main ( int argc, char **argv )
       size=strlen(word1);
 
     }
-    else if (strlen(word1)!=size){
+    else if (strlen(word1)!= size){ /* Tamanho diferente => grafo novo sempre */
       facagarfo(faca);
       free(tw);
       free(wt);
@@ -307,68 +307,29 @@ int main ( int argc, char **argv )
       modo2=modo;
       size=strlen(word1);
     }
-    else if ((strcmp(word1, st_palavras->palavras[strlen(word1) - 1][o]) == 0) && (strcmp(word2, st_palavras->palavras[strlen(word1) - 1][a]) == 0)){
-      if (wt[o] > modo * modo){
-        facagarfo(faca);
-        free(tw);
-        free(wt);
-        faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
-        putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
-        o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        tw = (int *) malloc(sizeof(int)*(faca->nv));
-        wt = (int *) malloc(sizeof(int)*(faca->nv));
-
-        if(tw==NULL || wt==NULL){
-          exit(-1);
-        }
-        modo2=modo;
-        size=strlen(word1);
-      }
-      else
+    else if (modo == modo2 ){ /* Pode se manter o grafo. Temos que fazer dikstra? */
+      if ((strcmp(word1, st_palavras->palavras[strlen(word1) - 1][o]) == 0) && (strcmp(word2, st_palavras->palavras[strlen(word1) - 1][a]) == 0))
         dj =1;
-    }
-    else if (strcmp(word2, st_palavras->palavras[strlen(word1) - 1][a])){
+      else if (strcmp(word2, st_palavras->palavras[strlen(word1) - 1][a]) == 0 ){
+        o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+        if (tw[o] != -1 && wt[o] < modo * modo)
+          dj = 1;
+      }
+      else if (strcmp(word1, st_palavras->palavras[strlen(word1) - 1][a]) == 0 ){
+        o = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+        if (tw[o] != -1 && wt[o] < modo * modo)
+          dj = 1;
+      }
+      else{
       o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-      if (faca->nv < o){
-        facagarfo(faca);
-        free(tw);
-        free(wt);
-        faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
-        putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
-        o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        tw = (int *) malloc(sizeof(int)*(faca->nv));
-        wt = (int *) malloc(sizeof(int)*(faca->nv));
-
-        if(tw==NULL || wt==NULL){
-          exit(-1);
-        }
-        modo2=modo;
-        size=strlen(word1);
+      a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
       }
-      else if (wt[o] > modo * modo){
-        facagarfo(faca);
-        free(tw);
-        free(wt);
-        faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
-        putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
-        o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
-        tw = (int *) malloc(sizeof(int)*(faca->nv));
-        wt = (int *) malloc(sizeof(int)*(faca->nv));
-
-        if(tw==NULL || wt==NULL){
-          exit(-1);
-        }
-        modo2=modo;
-        size=strlen(word1);
-      }
-      else
-        dj = 1;
+    } /* Caso seja um problema com palavras de novo tamanho (=> novo grafo) */
+    else if(modo < modo2){ /* Trim do grafo */
+      faca = colhergarfo(faca, modo * modo);
     }
 
-    else if(modo>modo2){
+    else{ /* Novo grafo */
       facagarfo(faca);
       free(tw);
       free(wt);
@@ -385,25 +346,24 @@ int main ( int argc, char **argv )
       modo2=modo;
       size=strlen(word1);
     }
-    else if(modo<modo2){
-      faca=colhergarfo(faca,(modo*modo));
-    }
+    
+  
 
-    if (dj == 0)
+    if (dj == 0)  /* aplica dijkstra se necessário */
       djigja(faca, a, o, tw, wt, 1000000000);
 
-    else
+    else /* reset da flag de dikstra se este não é necessário */
       dj = 0;
   
-    if(tw[o]!=-1){
+    if(tw[o]!=-1){ /* Se há solução */
       fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], wt[o]);
-      for (j = tw[o]; j != tw[j] && tw[j] !=-1; j = tw[j]){
+     /*  for (j = tw[o]; j != tw[j] && tw[j] !=-1; j = tw[j]){
         fprintf(out,"%s\n", st_palavras->palavras[strlen(word1) -1][j]);
-      }
+      } */
     }
-    else
+    else /* Se não há */
       fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], tw[o]);
-    fprintf(out, "%s\n\n", st_palavras->palavras[strlen(word1) -1][a]);
+   /*  fprintf(out, "%s\n\n", st_palavras->palavras[strlen(word1) -1][a]); */
     
     /* if (modo == 1){
       sub_1(word1, st_palavras, out);
@@ -419,7 +379,7 @@ int main ( int argc, char **argv )
     } */
     
   }
-  if(fr == 1){
+  if(fr == 1){ /* Se não há problemas que impliquem alocação, não se faz free */
     free(tw);
     free(wt);
     facagarfo(faca);
