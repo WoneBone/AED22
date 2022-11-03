@@ -29,7 +29,7 @@ garfo* garfointit(int nv){
 }
 
 /*************************************************************
-*   garfointit()
+*   putingarfo()
 *   
 *   Argumentos: g - garfo a preencher
 *               v[] - vetor de vértices
@@ -68,7 +68,7 @@ void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item)){
 }
 
 /*************************************************************
-*   garfointit()
+*   facagarfo()
 *   
 *   Argumentos: g - garfo a libertar
 *
@@ -76,7 +76,7 @@ void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item)){
 *
 *   Side effects: none
 *
-*   Descrição: dá free de grafo
+*   Descrição: liberta o grafo dado
 * 
 *
 **************************************************************/
@@ -154,6 +154,21 @@ garfo * colhergarfo(garfo* g, int nmax_wt){
     
     return g;
 }
+/*************************************************************
+*   djigja()
+*   
+*   Argumentos: g- garfo onde encontrar o caminho , o - palavra de origem, a- palavra de destino
+*   inhead[]- vetor para o caminho encontrado, wt- array com os pesos de mutações,
+*   max_wt- variavel poara determinar o weight dos caminhos nao percorridos
+*
+*   Returns:
+*
+*   Side effects: none
+*
+*   Descrição: implementa o algoritmo dikstra num garfo dado para encontrar o melhor caminho entre o e a
+* 
+*
+**************************************************************/
 
 void djigja(garfo *g, int o, int d, int inhead[], int wt[], int max_wt){
     int v, w;
@@ -248,6 +263,20 @@ void puthead(head* a, int b, int pr){
     a->e++;
     return;
 }
+/*************************************************************
+*   fixheadup()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo , pos-
+*               
+*
+*   Returns: 
+*
+*   Side effects: none
+*
+*   Descrição: acerta o acervo para quando o filho tem uma maior prioridade que o pai
+* 
+*
+**************************************************************/
 
 void fixheadup(head* a, int pos){
     int tmp;
@@ -289,6 +318,20 @@ int gethead(head * a){
     a->pos[ret] = -1;
     return ret;
 }
+/*************************************************************
+*   fixheadup()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo , pos-
+*               
+*
+*   Returns: 
+*
+*   Side effects: none
+*
+*   Descrição: acerta o acervo para quando o pai tem uma menor prioridade que o filho
+* 
+*
+**************************************************************/
 
 void fixheadown(head *a, int pos){
     int tmp;
@@ -318,6 +361,20 @@ void fixheadown(head *a, int pos){
     }
 
 }
+/*************************************************************
+*   pullout()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo
+*               
+*
+*   Returns: 
+*
+*   Side effects: none
+*
+*   Descrição: dá free ao acervo 
+* 
+*
+**************************************************************/
 
 void pullout(head *a){
 
@@ -328,16 +385,59 @@ void pullout(head *a){
     
 
 }
+/*************************************************************
+*   headnotempty()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo
+*               
+*
+*   Returns: int
+*
+*   Side effects: none
+*
+*   Descrição: verifica se a cabeça do acervo nãoi esta vazia
+* 
+*
+**************************************************************/
+
 
 int headnotempty(head *a){
     if (a->e == 0)
         return 0;
     return 1;
 }
+/*************************************************************
+*   getprius()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo, v-
+*               
+*
+*   Returns: prioridade
+*
+*   Side effects: none
+*
+*   Descrição: vai buscar a prioridade de um membro do acervo
+* 
+*
+**************************************************************/
 
 int getprius(head *a, int v){
     return a->pr[a->pos[v]];
 }
+/*************************************************************
+*   chgprius()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo, v-, pr- prioridade de um membro
+*               
+*
+*   Returns: 
+*
+*   Side effects: none
+*
+*   Descrição: muda a priporoidade de um membro do acervo
+* 
+*
+**************************************************************/
 
 void chgprius(head *a, int v, int pr){
     if ( a->pr[a->pos[v]] < pr){
@@ -352,6 +452,20 @@ void chgprius(head *a, int v, int pr){
     return;
 
 } 
+/*************************************************************
+*   pullout()
+*   
+*   Argumentos: head* a - pointer para o principio do acervo
+*               
+*
+*   Returns: 
+*
+*   Side effects: none
+*
+*   Descrição: dá free ao acervo 
+* 
+*
+**************************************************************/
 
 int getpos(head *a, int v){
     return a->pos[v];
