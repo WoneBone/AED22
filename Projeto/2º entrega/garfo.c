@@ -51,6 +51,10 @@ void putingarfo(garfo* g,Item v[],int max_wt,int test(Item,Item)){
     for (i = 0; i < g->nv; i++){
         for (j = i + 1; j < g->nv; j++){
             wt = test(v[i], v[j]);
+            if((strcmp(v[j], "descontratariamos") == 0) && (strcmp(v[i], "desacobardamentos") == 0)){
+                i--;
+                i++;
+            }
             if (wt <= max_wt && wt >= 0){
                 n1 = (node *) malloc(sizeof(node));
                 n2 = (node *) malloc(sizeof(node));
@@ -198,12 +202,12 @@ void djigja(garfo *g, int o, int d, int inhead[], int wt[], int max_wt){
         while(n != NULL){
             i = getItemLinkedList(n);
             if (inhead[i->n2] == -1){
-                puthead(a, i->n2, i->wt + t->wt);
+                puthead(a, i->n2, (i->wt + t->wt));
                 inhead[i->n2] = t -> n2;
             }
             else if ( getpos(a, i->n2) != -1 && (w = i->wt + t->wt) < getprius(a, i->n2)){
                 chgprius(a, i->n2, w);
-                inhead[i->n2] = t -> n2;
+                inhead[i->n2] = t->n2;
             }
             n = getNextNodeLinkedList(n);
         }

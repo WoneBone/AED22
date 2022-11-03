@@ -224,7 +224,7 @@ int test(Item w1, Item w2){
             count++;
         }
     }
-    count*= count;
+    count= count * count;
     return count;
 }
 /******************************************************************************
@@ -359,17 +359,17 @@ int main ( int argc, char **argv )
 
     else /* reset da flag de dikstra se este não é necessário */
       dj = 0;
-  
-    if(tw[o]!=-1){ /* Se há solução */
-      fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], wt[o]);
-     /*  for (j = tw[o]; j != tw[j] && tw[j] !=-1; j = tw[j]){
-        fprintf(out,"%s\n", st_palavras->palavras[strlen(word1) -1][j]);
-      } */
-    }
-    else /* Se não há */
-      fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], tw[o]);
-   /*  fprintf(out, "%s\n\n", st_palavras->palavras[strlen(word1) -1][a]); */
-    
+    /* for (o = 0; 0 < faca->nv - 1; o++){ */
+      if(tw[o]!=-1){ /* Se há solução */
+        fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], wt[o]);
+        for (j = tw[o]; j != tw[j] && tw[j] !=-1; j = tw[j]){
+          fprintf(out,"%s\n", st_palavras->palavras[strlen(word1) -1][j]);
+        }
+      }
+      else /* Se não há */
+        fprintf(out, "%s %d\n", st_palavras->palavras[strlen(word1) - 1][o], tw[o]);
+      fprintf(out, "%s\n\n", st_palavras->palavras[strlen(word1) -1][a]);
+   /*  } */
     /* if (modo == 1){
       sub_1(word1, st_palavras, out);
       fprintf(out,"\n");
