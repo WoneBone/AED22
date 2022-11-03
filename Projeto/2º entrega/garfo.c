@@ -253,6 +253,7 @@ void fixheadup(head* a, int pos){
     int tmp;
     int t;
     while(pos > 0 && (a->pr[(pos -1)/2] > a->pr[pos])){
+        
         tmp = a->heads[pos];
         a->heads[pos] = a->heads[(pos-1)/2];
         a->heads[(pos-1)/2] = tmp;
@@ -270,6 +271,7 @@ void fixheadup(head* a, int pos){
 
 int gethead(head * a){
     int ret = a->heads[0], t;
+
     a->heads[0] = -1;
     a->pr[0] = a->wt;
     a->pos[ret] = -1;

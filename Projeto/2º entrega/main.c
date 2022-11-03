@@ -319,6 +319,9 @@ int main ( int argc, char **argv )
         o = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
         if (tw[o] != -1 && wt[o] < modo * modo)
           dj = 1;
+        j = a;
+        a = o;
+        o = j;
       }
       else{
       o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
@@ -327,13 +330,15 @@ int main ( int argc, char **argv )
     } /* Caso seja um problema com palavras de novo tamanho (=> novo grafo) */
     else if(modo < modo2){ /* Trim do grafo */
       faca = colhergarfo(faca, modo * modo);
+      a = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
+      o = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
     }
 
     else{ /* Novo grafo */
       facagarfo(faca);
       free(tw);
       free(wt);
-      faca=garfointit(st_palavras->tamanho[strlen(word1)-1]);
+      faca = garfointit(st_palavras->tamanho[strlen(word1)-1]);
       putingarfo(faca,(Item*) st_palavras->palavras[strlen(word1)-1], modo * modo,test);
       o = bis(word1, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
       a = bis(word2, st_palavras->palavras[strlen(word1) -1], st_palavras->tamanho[strlen(word1) -1]) - st_palavras->palavras[strlen(word1) -1];
