@@ -55,7 +55,7 @@ FILE *AbreFicheiro ( char *nome, char *mode )
  * Returns: (none)
  * Side-Effects: none
  *
- * Description:
+ * Description: aloca dic
  *
  *****************************************************************************/
 
@@ -106,16 +106,14 @@ void AlocaTabelaPalavras ( FILE *f, dic *t)
  * Returns: (none)
  * Side-Effects: none
  *
- * Description:
+ * Description:This function searches for a word in the table. If the word is not found returns -1, otherwise returns the position of the word in the table 
  *
  *****************************************************************************/
 
 int NovaPalavra ( char *palavra, dic *t )
 {
   int i = 0, l = strlen(palavra);
-  /* This function searches for a word in the table.
-     if the word is not found returns -1,
-     Otherwise returns the position of the word in the table */
+
   while ( ( t->palavras[l -1][i][0] != '\0' ) && i < t->n_total_palavras ) {
     if ( strcmp ( t->palavras[l - 1][i], palavra ) == 0 )
       return (i);
@@ -132,7 +130,7 @@ int NovaPalavra ( char *palavra, dic *t )
  * Returns: (none)
  * Side-Effects: none
  *
- * Description:
+ * Description: Prienche estrutura de dicionário t com as palavras devidamente organizadas
  *
  *****************************************************************************/
 
@@ -157,14 +155,14 @@ void PreencheTabelaPalavras ( FILE *f, dic *t )
 }
 
 /******************************************************************************
- * AlocaTabelaPalavras()
+ * FreeTabrelaPalacras())
  *
- * Arguments: ficheiro - pointer to string holding name of file to open
- *            dic - pointer to structure where information will be saved
+ * Arguments: t - tabela a ser freed (william wallace)
+ *            
  * Returns: (none)
  * Side-Effects: none
  *
- * Description:
+ * Description: FREDOOOOOMM
  *
  *****************************************************************************/
 
